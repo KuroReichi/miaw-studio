@@ -1,0 +1,57 @@
+/* Some devices may not have color preferences, so keep this as the default. ~ Kuro */
+:root {
+	/* Base */
+	--background: rgb(15, 17, 21);
+	--surface: rgb(24, 27, 33);
+	--surface-elevated: rgb(30, 34, 42);
+	--surface-overlay: rgb(36, 41, 50);
+
+	/* Text */
+	--text-primary: rgb(245, 247, 250);
+	--text-secondary: rgb(200, 208, 220);
+	--text-muted: rgb(145, 155, 170);
+	--text-disabled: rgb(104, 113, 126);
+	--text-inverse: rgb(15, 17, 21);
+
+	/* Text shadow */
+	--text-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+	--text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+	--text-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.45);
+
+	/* Accent */
+	--primary: rgb(77, 124, 255);
+	--primary-hover: rgb(101, 143, 255);
+	--primary-active: rgb(51, 105, 242);
+	--primary-soft: rgba(77, 124, 255, 0.16);
+	--primary-soft-hover: rgba(77, 124, 255, 0.24);
+
+	/* Secondary accent */
+	--secondary: rgb(128, 140, 166);
+	--secondary-soft: rgba(128, 140, 166, 0.14);
+
+	/* State colors */
+	--success: rgb(71, 201, 133);
+	--success-soft: rgba(71, 201, 133, 0.16);
+	--warning: rgb(245, 180, 70);
+	--warning-soft: rgba(245, 180, 70, 0.16);
+	--danger: rgb(235, 87, 87);
+	--danger-soft: rgba(235, 87, 87, 0.16);
+	--info: rgb(74, 163, 255);
+	--info-soft: rgba(74, 163, 255, 0.16);
+
+	/* Border / divider */
+	--border: rgba(255, 255, 255, 0.08);
+	--border-strong: rgba(255, 255, 255, 0.14);
+	--divider: rgba(255, 255, 255, 0.06);
+	--ring: rgba(77, 124, 255, 0.4);
+
+	/* Shadow */
+	--shadow-color: rgba(10, 13, 22, 0.45);
+	--shadow-sm: rgba(0, 0, 0, 0.12) 0 2px 6px -2px;
+	--shadow: rgba(0, 0, 0, 0.16) 0 12px 24px -6px, rgba(0, 0, 0, 0.08) 0 4px 8px -2px;
+	--shadow-lg: rgba(0, 0, 0, 0.22) 0 20px 40px -12px;
+
+	/* Overlays */
+	--overlay: rgba(0, 0, 0, 0.45);
+	--backdrop: rgba(0, 0, 0, 0.6);
+}

@@ -1,0 +1,28 @@
+.container {
+	position: relative;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.container > section {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	pointer-events: none;
+	user-select: none;
+	transition:
+		transform 500ms ease,
+		opacity 500ms ease;
+	transform: translateY(50px);
+	opacity: 0;
+	overflow: hidden;
+}
+
+.container > section.show {
+	transform: translateY(0);
+	pointer-events: all;
+	user-select: text;
+	opacity: 1;
+}

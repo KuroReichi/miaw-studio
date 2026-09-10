@@ -1,0 +1,35 @@
+.miaw-navbar {
+	background: var(--surface);
+	user-select: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 8px;
+	div[datatype="nav-page"] {
+		display: flex;
+		text-shadow: 0px 0px 8px var(--shadow-color);
+		flex: 1;
+		justify-content: space-between;
+		align-items: center;
+		flex-direction: column;
+		margin: 8px 0px;
+		transition: all 0.4s ease;
+		transform: translateY(12px);
+		&.active {
+			color: var(--secondary);
+			text-shadow: 0px 2px 8px rgba(102, 107, 171, 0.2);
+			transform: translateY(4px);
+			span.label {
+				color: var(--text-secondary);
+				opacity: 1;
+			}
+		}
+		span.label {
+			margin-top: 5px;
+			font-family: Arial, Helvetica, sans-serif;
+			font-weight: 600;
+			opacity: 0;
+			transition: all 0.4s ease;
+		}
+	}
+}

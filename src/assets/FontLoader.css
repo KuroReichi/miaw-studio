@@ -1,0 +1,26 @@
+@font-face {
+	font-family: "MaterialSymbolsRounded";
+	src: url("./fonts/MaterialSymbolsRounded-VariableFont.ttf");
+	font-style: normal;
+	font-display: block;
+}
+
+.icon {
+	font-family: "MaterialSymbolsRounded";
+	font-size: 26px;
+	font-weight: 400;
+	font-variation-settings:
+		"FILL" 1,
+		"wght" 400,
+		"GRAD" 0,
+		"opsz" 24 !important;
+	user-select: none;
+	vertical-align: center;
+}
+
+@font-face {
+	font-family: "Metropolis";
+	src: url("./fonts/Metropolis.woff2");
+	font-style: normal;
+	font-display: block;
+}

@@ -1,0 +1,33 @@
+{
+	"name": "miaw-studio",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "reset && vite",
+		"build": "tsc -b && vite build",
+		"lint": "oxlint",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@react-oauth/google": "^0.13.5",
+		"eruda": "latest",
+		"firebase": "^12.17.1",
+		"jwt-decode": "^4.0.0",
+		"react": "^19.2.8",
+		"react-dom": "^19.2.8"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.29.7",
+		"@rolldown/plugin-babel": "^0.2.3",
+		"@types/babel__core": "^7.20.5",
+		"@types/node": "^24.13.3",
+		"@types/react": "^19.2.17",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^6.0.4",
+		"babel-plugin-react-compiler": "^1.0.0",
+		"oxlint": "^1.75.0",
+		"typescript": "~6.0.2",
+		"vite": "latest"
+	}
+}

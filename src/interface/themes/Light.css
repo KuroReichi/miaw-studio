@@ -1,0 +1,58 @@
+@media (prefers-color-scheme: light) {
+	:root {
+		/* Base */
+		--background: rgb(200, 200, 230);
+		--surface: rgb(172, 179, 217);
+		--surface-elevated: rgb(188, 194, 225);
+		--surface-overlay: rgb(196, 202, 232);
+
+		/* Text */
+		--text-primary: rgb(47, 52, 75);
+		--text-secondary: rgb(74, 83, 108);
+		--text-muted: rgb(98, 107, 130);
+		--text-disabled: rgb(126, 134, 154);
+		--text-inverse: rgb(250, 251, 255);
+
+		/* Text shadow */
+		--text-shadow-sm: 0 1px 2px rgba(20, 24, 40, 0.16);
+		--text-shadow: 0 2px 4px rgba(20, 24, 40, 0.22);
+		--text-shadow-lg: 0 4px 12px rgba(20, 24, 40, 0.28);
+
+		/* Accent */
+		--primary: rgb(63, 98, 211);
+		--primary-hover: rgb(46, 83, 197);
+		--primary-active: rgb(35, 69, 176);
+		--primary-soft: rgba(63, 98, 211, 0.14);
+		--primary-soft-hover: rgba(63, 98, 211, 0.2);
+
+		/* Secondary accent */
+		--secondary: rgb(102, 113, 144);
+		--secondary-soft: rgba(102, 113, 144, 0.12);
+
+		/* State colors */
+		--success: rgb(39, 154, 93);
+		--success-soft: rgba(39, 154, 93, 0.14);
+		--warning: rgb(184, 128, 30);
+		--warning-soft: rgba(184, 128, 30, 0.14);
+		--danger: rgb(205, 73, 73);
+		--danger-soft: rgba(205, 73, 73, 0.14);
+		--info: rgb(47, 124, 216);
+		--info-soft: rgba(47, 124, 216, 0.14);
+
+		/* Border / divider */
+		--border: rgba(34, 41, 62, 0.12);
+		--border-strong: rgba(34, 41, 62, 0.18);
+		--divider: rgba(34, 41, 62, 0.08);
+		--ring: rgba(63, 98, 211, 0.34);
+
+		/* Shadow */
+		--shadow-color: rgba(18, 16, 33, 0.12);
+		--shadow-sm: rgba(0, 0, 0, 0.08) 0 2px 6px -2px;
+		--shadow: rgba(0, 0, 0, 0.14) 0 10px 18px -6px, rgba(0, 0, 0, 0.08) 0 4px 8px -2px;
+		--shadow-lg: rgba(0, 0, 0, 0.18) 0 18px 36px -10px;
+
+		/* Overlays */
+		--overlay: rgba(20, 24, 40, 0.18);
+		--backdrop: rgba(20, 24, 40, 0.3);
+	}
+}

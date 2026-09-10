@@ -1,0 +1,15 @@
+.miaw-appbar {
+	background: var(--surface);
+	display: flex;
+	font-size: 26px;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: row;
+	margin: 0 -50px;
+	padding: 12.5px calc(12.5px + 50px);
+	transition: all 0.4s ease;
+	box-shadow: var(--shadow);
+	button .icon {
+		text-shadow: var(--text-shadow-lg);
+	}
+}
