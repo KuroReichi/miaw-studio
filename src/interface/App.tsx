@@ -11,6 +11,7 @@ import Container from "./components/Container";
 import Tab from "./components/TabNavigation";
 import Overlay from "./components/Overlay";
 
+import { Chat } from "./components/pages/Chat";
 import { Changelogs } from "./components/pages/Changelogs";
 
 interface GoogleUser {
@@ -37,14 +38,14 @@ const pages = {
 	global: {
 		icon: "public",
 		label: "In-Game Chat",
-		padding: false,
-		component: <div>Global Chat</div>
+		padding: true,
+		component: <Chat />
 	},
 	friends: {
 		icon: "groups",
 		label: "Player List",
 		padding: true,
-		component: <div>Friends</div>
+		component: <div>Player List [Tab]</div>
 	},
 	changelogs: {
 		icon: "deployed_code_history",
@@ -86,26 +87,27 @@ function App(): React.JSX.Element {
 	const [body, setBody] = React.useState("Checking Authentication State...");
 
 	React.useEffect(() => {
-		return () => {
-			async function init() {
-				setBody("Checking Authentication State...");
-				await delay();
-				UserAuth().then(async (authenticated) => {
-					if (!authenticated) {
-						setBody("User haven't logged in");
-					} else {
-						const user = getGoogleUser() as GoogleUser;
-						if (user.email_verified) setBody("Account Retrived");
-						await delay();
-						setBody("Preparing Resources...");
-						await delay();
-					}
+		async function init() {
+			setBody("Checking Authentication State...");
+			await delay();
+			const authenticated = await UserAuth();
+			if (!authenticated) {
+				setBody("User haven't logged in");
+			} else {
+				const user = getGoogleUser() as GoogleUser;
 
-					setTimeout(() => setHide(true), Math.random() * 100);
-				});
+				if (user?.email_verified) {
+					setBody("Account Retrived");
+				}
+
+				await delay();
+				setBody("Preparing Resources...");
+				await delay();
 			}
-			init();
-		};
+			setTimeout(() => setHide(true), Math.random() * 100);
+		}
+
+		init();
 	}, []);
 
 	return (
