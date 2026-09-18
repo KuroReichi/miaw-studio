@@ -1,56 +1,27 @@
 import React from "react";
+import "./styles/Notifications.css";
 
-function NotificationRoot(): React.JSX.Element {
+interface NotificationsProps {
+	onClose: () => void;
+}
+
+function NotificationRoot({ onClose }: NotificationsProps): React.JSX.Element {
 	return (
-		<div
-			style={{
-				display: "flex",
-				flex: "1 1 auto",
-				minHeight: "0",
-				flexDirection: "column",
-				boxSizing: "border-box",
-				overflow: "scroll"
-			}}>
-			<center>
-				<h3
-					style={{
-						margin: "20px 0 10px 0"
-					}}>
-					Notifications
-				</h3>
-			</center>
-			<div
-				style={{
-					height: "1.5px",
-					margin: "0px 10px",
-					marginBottom: "10px",
-					background: "var(--text-primary)"
-				}}></div>
-			<div
-				className="notification-list"
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					flex: 1,
-					padding: "15px",
-					overflow: "scroll"
-				}}>
-				<div className="notification-content">
-					<textarea />
-				</div>
+		<div className="notifications">
+			<header className="notifications-header">
+				<h3>Notifications</h3>
+
+				<button type="button" className="notifications-close" onClick={onClose} aria-label="Close notifications">
+					<span className="icon">close</span>
+				</button>
+			</header>
+
+			<div className="notification-list">
+				<div className="notification-content"></div>
 			</div>
-			<div
-				className="footer"
-				style={{
-					fontSize: "14px",
-					padding: "15px",
-					background: "var(--background)",
-					borderTop: "1px solid var(--surface-elevated)"
-				}}>
-				<center
-					style={{
-						color: "var(--text-muted)"
-					}}>
+
+			<div className="footer">
+				<center>
 					© MIAW Studio 2026 - <a href="#">Apache-2.0</a>
 				</center>
 			</div>
