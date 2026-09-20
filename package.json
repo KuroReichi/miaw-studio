@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "reset && vite",
+		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "oxlint",
 		"preview": "vite preview"

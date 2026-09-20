@@ -1,10 +1,10 @@
-import App from "./interface/App";
+import App from "@legiun/App";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import "./interface/themes/ThemeLoader";
-import "./interface/styles/layout/Overlay.css";
-import "./assets/FontLoader.css";
+import "@legiun/themes/ThemeLoader";
+import "@legiun/styles/layout/Overlay.css";
+import "@legiun/assets/FontLoader.css";
 import "./index.css";
 
 if (import.meta.env.DEV) {

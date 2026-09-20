@@ -7,5 +7,13 @@ export default defineConfig({
 	server: {
 		host: "127.0.0.1"
 	},
-	plugins: [react(), babel({ presets: [reactCompilerPreset()] })]
+	resolve: {
+		tsconfigPaths: true
+	},
+	plugins: [
+		react(),
+		babel({
+			presets: [reactCompilerPreset()]
+		})
+	]
 });

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import "../styles/interface/components/AppBar.css";
-import { getGoogleUser } from "../../auth/AuthCheck";
-import Notifications from "../layout/Notifications.tsx";
+import "@legiun/styles/interface/components/AppBar.css";
+import { getGoogleUser } from "@legiun/auth/AuthCheck";
+import { Notifications } from "@legiun/layout/Notifications";
 
 function AppBar(): React.JSX.Element {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -32,7 +32,7 @@ function AppBar(): React.JSX.Element {
 				</div>
 
 				<button type="button" onClick={() => setNotificationsOpen(true)} aria-label="Notifications">
-					<span className="icon">notifications</span>
+					<span className="icon">deployed_code_history</span>
 				</button>
 			</div>
 

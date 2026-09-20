@@ -1,9 +1,9 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { setGoogleAuth } from "../../auth/AuthCheck";
+import { setGoogleAuth } from "@legiun/auth/AuthCheck";
 
-import "../styles/interface/Authentication.css";
+import "@legiun/styles/interface/Authentication.css";
 
 export interface GoogleUser {
 	sub: string;

@@ -1,0 +1,255 @@
+.notifications {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	width: 100dvw;
+	height: 100vh;
+	height: 100dvh;
+	box-sizing: border-box;
+	overflow: hidden;
+	background: var(--background);
+	animation: notifications-enter 500ms ease forwards;
+}
+
+.notifications.notifications-closing {
+	animation: notifications-exit 400ms ease forwards;
+	pointer-events: none;
+}
+
+.notifications-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	min-height: 64px;
+	padding: 0 18px;
+	box-sizing: border-box;
+	flex-shrink: 0;
+	background: var(--surface);
+	border-bottom: 1px solid var(--surface-elevated);
+}
+
+.notifications-header h3 {
+	margin: 0;
+	color: var(--text);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1;
+}
+
+.notifications-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	color: var(--text);
+	cursor: pointer;
+}
+
+.notifications-close:disabled {
+	cursor: default;
+}
+
+.notifications-close .icon {
+	display: inline-block;
+	font-size: 24px;
+	animation: notifications-close-enter 400ms ease;
+}
+
+.notification-list {
+	flex: 1;
+	min-height: 0;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 18px 16px 24px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background: var(--background);
+	-webkit-overflow-scrolling: touch;
+}
+
+.notification-content {
+	width: 100%;
+	max-width: 760px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.notifications .footer {
+	flex-shrink: 0;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 14px 15px;
+	background: var(--surface);
+	border-top: 1px solid var(--surface-elevated);
+	font-size: 13px;
+}
+
+.notifications .footer center {
+	color: var(--text-muted);
+}
+
+@keyframes notifications-enter {
+	from {
+		transform: translateY(45px);
+		opacity: 0;
+	}
+
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes notifications-exit {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	to {
+		transform: translateY(55px);
+		opacity: 0;
+	}
+}
+
+@keyframes notifications-close-enter {
+	from {
+		opacity: 0;
+		transform: rotate(-180deg);
+	}
+
+	to {
+		opacity: 1;
+		transform: rotate(0deg);
+	}
+}
+
+.changelog-header {
+	padding: 22px 20px 26px;
+}
+
+.changelog-header h1 {
+	margin: 0;
+	color: var(--text);
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.changelog-header p {
+	margin: 5px 0 0;
+	color: var(--text-muted);
+	font-size: 13px;
+}
+
+.changelog-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 0 16px 24px;
+}
+
+.changelog-item {
+	display: flex;
+	flex-direction: column;
+	padding: 15px;
+	border: 1px solid var(--surface-elevated);
+	border-radius: 14px;
+	background: var(--surface);
+	transition:
+		transform 160ms ease,
+		border-color 160ms ease;
+}
+
+.changelog-item:hover {
+	transform: translateY(-1px);
+	border-color: var(--text-muted);
+}
+
+.changelog-dot {
+	display: none;
+}
+
+.changelog-date {
+	margin-bottom: 9px;
+	color: var(--text-muted);
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.changelog-main {
+	min-width: 0;
+}
+
+.changelog-type {
+	display: inline-flex;
+	margin-bottom: 8px;
+	padding: 4px 8px;
+	border-radius: 6px;
+	background: var(--surface-elevated);
+	color: var(--text-muted);
+	font-family: monospace;
+	font-size: 10px;
+	line-height: 1;
+}
+
+.changelog-main h2 {
+	margin: 0;
+	color: var(--text);
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.45;
+	overflow-wrap: anywhere;
+}
+
+.changelog-meta {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	margin-top: 12px;
+	color: var(--text-muted);
+	font-size: 11px;
+}
+
+.changelog-meta img {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.changelog-meta code {
+	color: var(--text-muted);
+	font-size: 10px;
+}
+
+.changelog-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 12px;
+	color: #9da1ff;
+	font-size: 11px;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.changelog-link:hover {
+	color: var(--text);
+}
+
+.changelog-loading {
+	padding: 30px 20px;
+	color: var(--text-muted);
+	font-size: 13px;
+	text-align: center;
+}

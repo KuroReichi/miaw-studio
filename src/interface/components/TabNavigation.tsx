@@ -1,4 +1,5 @@
-import "../styles/interface/components/TabNavigation.css";
+import React from "react";
+import "@legiun/styles/interface/components/TabNavigation.css";
 
 interface NavigationItem {
 	readonly icon: string;
@@ -12,20 +13,18 @@ interface NavigationProps<T extends string> {
 }
 
 function Tab<T extends string>({ pages, currentPage, onNavigate }: NavigationProps<T>): React.JSX.Element {
+	const pageEntries = Object.entries(pages) as [T, NavigationItem][];
+
 	return (
 		<nav className="miaw-navbar">
-			{Object.entries(pages).map(([page, item]) => {
-				const id = page as T;
-				const navigation = item as NavigationItem;
+			<div className="miaw-navbar-indicator" />
 
-				return (
-					<div key={id} datatype="nav-page" className={currentPage === id ? "active" : ""} onClick={() => onNavigate(id)}>
-						<span className="icon material-symbols-rounded">{navigation.icon}</span>
-
-						<span className="label">{navigation.label}</span>
-					</div>
-				);
-			})}
+			{pageEntries.map(([page, navigation]) => (
+				<div key={page} datatype="nav-page" className={currentPage === page ? "active" : ""} onClick={() => onNavigate(page)}>
+					<span className="icon material-symbols-rounded">{navigation.icon}</span>
+					<span className="label">{navigation.label}</span>
+				</div>
+			))}
 		</nav>
 	);
 }

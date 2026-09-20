@@ -1,6 +1,6 @@
-import "./styles/Chat.css";
+import "@legiun/styles/interface/pages/Home.css";
 
-export function Chat(): React.JSX.Element {
+export function Home(): React.JSX.Element {
 	return (
 		<div className="">
 			<div className="chat-header">
@@ -8,7 +8,7 @@ export function Chat(): React.JSX.Element {
 					<span className="icon">person</span>
 					<span>0 Online</span>
 				</div>
-				<a>right</a>
+				<span className="icon">lock</span>
 			</div>
 			<a>
 				lorem ipsum dolor sit amet consectetur adipiscing elit voluptas qui dolore soluta eu vel pariatur magna id quidem elit elit

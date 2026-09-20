@@ -1,18 +1,18 @@
 import React from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import { UserAuth, useUserAuth, getGoogleUser } from "../auth/AuthCheck";
-import Authentication from "./screen/Authentication";
+import { UserAuth, useUserAuth, getGoogleUser } from "@legiun/auth/AuthCheck";
+import Authentication from "@legiun/screen/Authentication";
 
-import "./styles/animations/LoadingAnimation.css";
+import "@legiun/styles/animations/LoadingAnimation.css";
 
-import AppBar from "./components/AppBar";
-import Container from "./components/Container";
-import Tab from "./components/TabNavigation";
-import Overlay from "./components/Overlay";
+import AppBar from "@legiun/components/AppBar";
+import Container from "@legiun/components/Container";
+import Tab from "@legiun/components/TabNavigation";
+import Overlay from "@legiun/components/Overlay";
 
-import { Chat } from "./components/pages/Chat";
-import { Changelogs } from "./components/pages/Changelogs";
+import { Home } from "@legiun/pages/Home";
+import { Projects } from "@legiun/pages/Projects";
 
 interface GoogleUser {
 	iss: string;
@@ -35,23 +35,17 @@ interface GoogleUser {
 const GOOGLE_CLIENT_ID = "608117489686-0chu2epsol2omo8hvst8sm3deblcthum.apps.googleusercontent.com";
 
 const pages = {
-	global: {
-		icon: "public",
-		label: "In-Game Chat",
+	home: {
+		icon: "home",
+		label: "Home",
 		padding: true,
-		component: <Chat />
+		component: <Home />
 	},
-	friends: {
-		icon: "groups",
-		label: "Player List",
+	projects: {
+		icon: "folder_code",
+		label: "Projects",
 		padding: true,
-		component: <div>Player List [Tab]</div>
-	},
-	changelogs: {
-		icon: "deployed_code_history",
-		label: "Changelogs",
-		padding: true,
-		component: <Changelogs />
+		component: <Projects />
 	},
 	account: {
 		icon: "settings_account_box",
@@ -64,7 +58,7 @@ type Page = keyof typeof pages;
 
 function AppContent(): React.JSX.Element {
 	const auth = useUserAuth();
-	const [currentPage, setCurrentPage] = React.useState<Page>("global");
+	const [currentPage, setCurrentPage] = React.useState<Page>("home");
 
 	if (!auth.authenticated) {
 		return <Authentication />;
@@ -73,7 +67,7 @@ function AppContent(): React.JSX.Element {
 	return (
 		<div className="app">
 			<AppBar />
-			<Container pages={pages} currentPage={currentPage} />
+			<Container pages={pages} currentPage={currentPage} onNavigate={setCurrentPage} />
 			<Tab pages={pages} currentPage={currentPage} onNavigate={setCurrentPage} />
 		</div>
 	);

@@ -1,40 +1,23 @@
 .container {
 	position: relative;
-	flex: 1 1 auto;
-	min-height: 0;
+	width: 100%;
+	height: 100%;
 	overflow: hidden;
-	overscroll-behavior-y: contain;
+	touch-action: pan-y;
 	overscroll-behavior-x: contain;
-}
 
-.container > section {
-	position: absolute;
-	inset: 0;
+	.container-track {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		will-change: transform;
+	}
 
-	display: flex;
-	flex-direction: column;
-
-	overflow-y: auto;
-	overflow-x: hidden;
-	-webkit-overflow-scrolling: touch;
-	scrollbar-gutter: stable;
-
-	pointer-events: none;
-	user-select: none;
-
-	transform: translateY(50px);
-	opacity: 0;
-
-	transition:
-		transform 500ms ease,
-		opacity 500ms ease;
-}
-
-.container > section.show {
-	transform: translateY(0);
-
-	pointer-events: all;
-	user-select: text;
-
-	opacity: 1;
+	.container-page {
+		flex: 0 0 100%;
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		overflow: hidden;
+	}
 }
