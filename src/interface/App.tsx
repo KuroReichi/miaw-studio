@@ -13,6 +13,7 @@ import Overlay from "@legiun/components/Overlay";
 
 import { Home } from "@legiun/pages/Home";
 import { Projects } from "@legiun/pages/Projects";
+import { Account } from "@legiun/pages/Account";
 
 interface GoogleUser {
 	iss: string;
@@ -51,7 +52,7 @@ const pages = {
 		icon: "settings_account_box",
 		label: "Account",
 		padding: false,
-		component: <div>Account</div>
+		component: <Account />
 	}
 } as const;
 type Page = keyof typeof pages;

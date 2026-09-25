@@ -1,4 +1,4 @@
-.notifications {
+.commits {
 	position: fixed;
 	inset: 0;
 	z-index: 9999;
@@ -11,15 +11,15 @@
 	box-sizing: border-box;
 	overflow: hidden;
 	background: var(--background);
-	animation: notifications-enter 500ms ease forwards;
+	animation: commits-enter 500ms ease forwards;
 }
 
-.notifications.notifications-closing {
-	animation: notifications-exit 400ms ease forwards;
+.commits.commits-closing {
+	animation: commits-exit 400ms ease forwards;
 	pointer-events: none;
 }
 
-.notifications-header {
+.commits-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -32,7 +32,7 @@
 	border-bottom: 1px solid var(--surface-elevated);
 }
 
-.notifications-header h3 {
+.commits-header h3 {
 	margin: 0;
 	color: var(--text);
 	font-size: 16px;
@@ -40,7 +40,7 @@
 	line-height: 1;
 }
 
-.notifications-close {
+.commits-close {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -54,17 +54,17 @@
 	cursor: pointer;
 }
 
-.notifications-close:disabled {
+.commits-close:disabled {
 	cursor: default;
 }
 
-.notifications-close .icon {
+.commits-close .icon {
 	display: inline-block;
 	font-size: 24px;
-	animation: notifications-close-enter 400ms ease;
+	animation: commits-close-enter 400ms ease;
 }
 
-.notification-list {
+.commits-list {
 	flex: 1;
 	min-height: 0;
 	width: 100%;
@@ -76,14 +76,14 @@
 	-webkit-overflow-scrolling: touch;
 }
 
-.notification-content {
+.commits-content {
 	width: 100%;
 	max-width: 760px;
 	margin: 0 auto;
 	box-sizing: border-box;
 }
 
-.notifications .footer {
+.commits .footer {
 	flex-shrink: 0;
 	width: 100%;
 	box-sizing: border-box;
@@ -93,11 +93,11 @@
 	font-size: 13px;
 }
 
-.notifications .footer center {
+.commits .footer center {
 	color: var(--text-muted);
 }
 
-@keyframes notifications-enter {
+@keyframes commits-enter {
 	from {
 		transform: translateY(45px);
 		opacity: 0;
@@ -109,7 +109,7 @@
 	}
 }
 
-@keyframes notifications-exit {
+@keyframes commits-exit {
 	from {
 		transform: translateY(0);
 		opacity: 1;
@@ -121,7 +121,7 @@
 	}
 }
 
-@keyframes notifications-close-enter {
+@keyframes commits-close-enter {
 	from {
 		opacity: 0;
 		transform: rotate(-180deg);
@@ -181,7 +181,7 @@
 
 .changelog-date {
 	margin-bottom: 9px;
-	color: var(--text-muted);
+	color: var(--text-primaru);
 	font-size: 11px;
 	font-weight: 500;
 }
@@ -237,14 +237,14 @@
 	align-items: center;
 	gap: 4px;
 	margin-top: 12px;
-	color: #9da1ff;
+	color: var(--primary);
 	font-size: 11px;
 	font-weight: 500;
 	text-decoration: none;
 }
 
 .changelog-link:hover {
-	color: var(--text);
+	color: var(--primary-active);
 }
 
 .changelog-loading {
