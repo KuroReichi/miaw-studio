@@ -1,9 +1,9 @@
-import { getGoogleUser } from "@legiun/auth/AuthCheck";
+import * as Auth from "@legiun/auth/AuthCheck";
 import * as MUI from "@mui/material";
 import "@legiun/styles/interface/pages/Account.css";
 
 export function Account(): React.JSX.Element {
-	const user = getGoogleUser();
+	const user = Auth.getGoogleUser() as import("@legiun/auth/AuthCheck").GoogleUser;
 
 	return (
 		<main>
@@ -36,9 +36,9 @@ export function Account(): React.JSX.Element {
 					<div
 						datatype="card-header"
 						style={{
-							color: "var(--text-primary)",
+							color: "var(--white)",
 							background: "var(--danger)",
-							borderColor: "var(--danger-soft)"
+							borderColor: "var(--danger-border-strong)"
 						}}>
 						<div>
 							<span className="icon">warning</span>
@@ -51,7 +51,14 @@ export function Account(): React.JSX.Element {
 								</b>
 							</span>
 						</div>
-						<MUI.Tooltip describeChild={true} arrow={true} title="Danger Zone" enterDelay={10} enterTouchDelay={10}>
+						<MUI.Tooltip
+							describeChild={true}
+							arrow={true}
+							placement="auto-start"
+							title="Any action is considered as danger anf cannot be undone once you confirm it."
+							about="danger"
+							enterDelay={10}
+							enterTouchDelay={10}>
 							<span className="icon">help</span>
 						</MUI.Tooltip>
 					</div>
@@ -59,16 +66,16 @@ export function Account(): React.JSX.Element {
 						datatype="card-body"
 						style={{
 							justifyContent: "flex-start",
-							flexDirection: "row"
+							flexDirection: "row",
+							background: "var(--danger-soft)"
 						}}>
-						<MUI.Button variant="contained" style={{ background: "var(--secondary)" }}>
-							Switch Account
-						</MUI.Button>
 						<MUI.Button
 							variant="contained"
-							color="error"
-							onClick={(e) => {
-								alert();
+							style={{
+								background: "var(--danger-active)"
+							}}
+							onClick={() => {
+								Auth.clearGoogleAuth();
 							}}>
 							Log-out
 						</MUI.Button>

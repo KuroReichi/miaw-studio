@@ -2,14 +2,23 @@
 	:root {
 		/* Base */
 		--background: rgb(200, 200, 230);
+		--background-soft: rgb(207, 208, 235);
+		--background-elevated: rgb(215, 216, 240);
+
 		--surface: rgb(172, 179, 217);
+		--surface-soft: rgb(181, 187, 222);
+		--surface-hover: rgb(188, 194, 225);
+		--surface-active: rgb(195, 201, 231);
 		--surface-elevated: rgb(188, 194, 225);
 		--surface-overlay: rgb(196, 202, 232);
+		--surface-raised: rgb(204, 209, 237);
 
 		/* Text */
 		--text-primary: rgb(47, 52, 75);
 		--text-secondary: rgb(74, 83, 108);
+		--text-tertiary: rgb(86, 95, 119);
 		--text-muted: rgb(98, 107, 130);
+		--text-placeholder: rgb(112, 120, 142);
 		--text-disabled: rgb(126, 134, 154);
 		--text-inverse: rgb(250, 251, 255);
 
@@ -22,37 +31,222 @@
 		--primary: rgb(63, 98, 211);
 		--primary-hover: rgb(46, 83, 197);
 		--primary-active: rgb(35, 69, 176);
+		--primary-light: rgb(91, 121, 221);
+		--primary-dark: rgb(45, 75, 172);
 		--primary-soft: rgba(63, 98, 211, 0.14);
 		--primary-soft-hover: rgba(63, 98, 211, 0.2);
+		--primary-soft-active: rgba(63, 98, 211, 0.26);
+		--primary-border: rgba(63, 98, 211, 0.3);
+		--primary-border-strong: rgba(63, 98, 211, 0.46);
 
 		/* Secondary accent */
 		--secondary: rgb(102, 113, 144);
+		--secondary-hover: rgb(88, 100, 132);
+		--secondary-active: rgb(76, 87, 117);
+		--secondary-light: rgb(124, 134, 162);
+		--secondary-dark: rgb(82, 93, 123);
 		--secondary-soft: rgba(102, 113, 144, 0.12);
+		--secondary-soft-hover: rgba(102, 113, 144, 0.18);
+		--secondary-soft-active: rgba(102, 113, 144, 0.24);
+		--secondary-border: rgba(102, 113, 144, 0.28);
+		--secondary-border-strong: rgba(102, 113, 144, 0.42);
 
 		/* State colors */
 		--success: rgb(39, 154, 93);
+		--success-hover: rgb(31, 137, 80);
+		--success-active: rgb(25, 118, 68);
+		--success-light: rgb(66, 174, 115);
+		--success-dark: rgb(31, 126, 77);
 		--success-soft: rgba(39, 154, 93, 0.14);
+		--success-soft-hover: rgba(39, 154, 93, 0.2);
+		--success-soft-active: rgba(39, 154, 93, 0.26);
+		--success-border: rgba(39, 154, 93, 0.3);
+		--success-border-strong: rgba(39, 154, 93, 0.46);
+
 		--warning: rgb(184, 128, 30);
+		--warning-hover: rgb(164, 111, 20);
+		--warning-active: rgb(141, 93, 15);
+		--warning-light: rgb(202, 148, 49);
+		--warning-dark: rgb(153, 103, 20);
 		--warning-soft: rgba(184, 128, 30, 0.14);
+		--warning-soft-hover: rgba(184, 128, 30, 0.2);
+		--warning-soft-active: rgba(184, 128, 30, 0.26);
+		--warning-border: rgba(184, 128, 30, 0.3);
+		--warning-border-strong: rgba(184, 128, 30, 0.46);
+
 		--danger: rgb(205, 73, 73);
+		--danger-hover: rgb(187, 58, 58);
+		--danger-active: rgb(165, 47, 47);
+		--danger-light: rgb(219, 99, 99);
+		--danger-dark: rgb(173, 57, 57);
 		--danger-soft: rgba(205, 73, 73, 0.14);
+		--danger-soft-hover: rgba(205, 73, 73, 0.2);
+		--danger-soft-active: rgba(205, 73, 73, 0.26);
+		--danger-border: rgba(205, 73, 73, 0.3);
+		--danger-border-strong: rgba(205, 73, 73, 0.46);
+
 		--info: rgb(47, 124, 216);
+		--info-hover: rgb(37, 106, 191);
+		--info-active: rgb(29, 89, 166);
+		--info-light: rgb(71, 143, 225);
+		--info-dark: rgb(38, 103, 177);
 		--info-soft: rgba(47, 124, 216, 0.14);
+		--info-soft-hover: rgba(47, 124, 216, 0.2);
+		--info-soft-active: rgba(47, 124, 216, 0.26);
+		--info-border: rgba(47, 124, 216, 0.3);
+		--info-border-strong: rgba(47, 124, 216, 0.46);
+
+		/* Additional colors */
+		--purple: rgb(121, 82, 191);
+		--purple-hover: rgb(105, 68, 171);
+		--purple-active: rgb(88, 56, 148);
+		--purple-soft: rgba(121, 82, 191, 0.14);
+		--purple-border: rgba(121, 82, 191, 0.3);
+
+		--pink: rgb(195, 76, 139);
+		--pink-hover: rgb(174, 60, 120);
+		--pink-active: rgb(151, 48, 102);
+		--pink-soft: rgba(195, 76, 139, 0.14);
+		--pink-border: rgba(195, 76, 139, 0.3);
+
+		--cyan: rgb(39, 145, 158);
+		--cyan-hover: rgb(31, 126, 139);
+		--cyan-active: rgb(25, 108, 120);
+		--cyan-soft: rgba(39, 145, 158, 0.14);
+		--cyan-border: rgba(39, 145, 158, 0.3);
+
+		--teal: rgb(38, 139, 123);
+		--teal-hover: rgb(30, 121, 106);
+		--teal-active: rgb(24, 103, 91);
+		--teal-soft: rgba(38, 139, 123, 0.14);
+		--teal-border: rgba(38, 139, 123, 0.3);
+
+		--orange: rgb(201, 105, 42);
+		--orange-hover: rgb(180, 89, 31);
+		--orange-active: rgb(157, 75, 23);
+		--orange-soft: rgba(201, 105, 42, 0.14);
+		--orange-border: rgba(201, 105, 42, 0.3);
+
+		/* Neutral */
+		--white: rgb(255, 255, 255);
+		--black: rgb(0, 0, 0);
+
+		--gray-50: rgb(250, 251, 255);
+		--gray-100: rgb(238, 240, 247);
+		--gray-200: rgb(220, 223, 234);
+		--gray-300: rgb(201, 205, 219);
+		--gray-400: rgb(181, 186, 202);
+		--gray-500: rgb(158, 164, 183);
+		--gray-600: rgb(134, 141, 161);
+		--gray-700: rgb(110, 117, 138);
+		--gray-800: rgb(82, 89, 111);
+		--gray-900: rgb(57, 63, 84);
 
 		/* Border / divider */
 		--border: rgba(34, 41, 62, 0.12);
+		--border-hover: rgba(34, 41, 62, 0.16);
+		--border-active: rgba(34, 41, 62, 0.22);
 		--border-strong: rgba(34, 41, 62, 0.18);
+		--border-subtle: rgba(34, 41, 62, 0.07);
 		--divider: rgba(34, 41, 62, 0.08);
+		--divider-strong: rgba(34, 41, 62, 0.12);
+
+		/* Focus / selection */
 		--ring: rgba(63, 98, 211, 0.34);
+		--ring-strong: rgba(63, 98, 211, 0.52);
+		--focus: rgba(63, 98, 211, 0.2);
+		--selection: rgba(63, 98, 211, 0.22);
+		--selection-text: rgb(47, 52, 75);
+		--hover-overlay: rgba(34, 41, 62, 0.04);
+		--active-overlay: rgba(34, 41, 62, 0.08);
+		--pressed-overlay: rgba(34, 41, 62, 0.12);
 
 		/* Shadow */
 		--shadow-color: rgba(18, 16, 33, 0.12);
+		--shadow-xs: rgba(0, 0, 0, 0.06) 0 1px 2px;
 		--shadow-sm: rgba(0, 0, 0, 0.08) 0 2px 6px -2px;
 		--shadow: rgba(0, 0, 0, 0.14) 0 10px 18px -6px, rgba(0, 0, 0, 0.08) 0 4px 8px -2px;
+		--shadow-md: rgba(0, 0, 0, 0.16) 0 14px 28px -8px, rgba(0, 0, 0, 0.08) 0 6px 12px -3px;
 		--shadow-lg: rgba(0, 0, 0, 0.18) 0 18px 36px -10px;
+		--shadow-xl: rgba(0, 0, 0, 0.22) 0 26px 52px -14px;
 
-		/* Overlays */
+		/* Overlay */
+		--overlay-light: rgba(20, 24, 40, 0.04);
 		--overlay: rgba(20, 24, 40, 0.18);
+		--overlay-heavy: rgba(20, 24, 40, 0.24);
 		--backdrop: rgba(20, 24, 40, 0.3);
+		--backdrop-heavy: rgba(20, 24, 40, 0.48);
+
+		/* Code */
+		--code-background: rgb(190, 192, 220);
+		--code-surface: rgb(198, 200, 226);
+		--code-border: rgba(34, 41, 62, 0.12);
+		--code-text: rgb(47, 52, 75);
+		--code-comment: rgb(105, 112, 135);
+		--code-keyword: rgb(121, 82, 191);
+		--code-string: rgb(39, 154, 93);
+		--code-number: rgb(184, 128, 30);
+		--code-function: rgb(63, 98, 211);
+		--code-variable: rgb(195, 76, 139);
+		--code-type: rgb(39, 145, 158);
+
+		/* Link */
+		--link: rgb(46, 83, 197);
+		--link-hover: rgb(35, 69, 176);
+		--link-active: rgb(28, 57, 151);
+		--link-visited: rgb(121, 82, 191);
+
+		/* Form */
+		--input-background: rgb(190, 192, 220);
+		--input-background-hover: rgb(196, 199, 225);
+		--input-background-focus: rgb(202, 204, 230);
+		--input-border: rgba(34, 41, 62, 0.12);
+		--input-border-hover: rgba(34, 41, 62, 0.18);
+		--input-border-focus: rgba(63, 98, 211, 0.48);
+		--input-placeholder: rgb(112, 120, 142);
+		--input-disabled: rgb(184, 187, 207);
+
+		/* Button */
+		--button-primary: var(--primary);
+		--button-primary-hover: var(--primary-hover);
+		--button-primary-active: var(--primary-active);
+		--button-secondary: var(--secondary);
+		--button-secondary-hover: var(--secondary-hover);
+		--button-secondary-active: var(--secondary-active);
+		--button-disabled: rgb(166, 170, 190);
+		--button-disabled-text: rgb(126, 134, 154);
+
+		/* Status */
+		--status-online: var(--success);
+		--status-away: var(--warning);
+		--status-busy: var(--danger);
+		--status-offline: var(--text-disabled);
+		--status-info: var(--info);
+
+		/* Charts */
+		--chart-primary: var(--primary);
+		--chart-secondary: var(--cyan);
+		--chart-success: var(--success);
+		--chart-warning: var(--warning);
+		--chart-danger: var(--danger);
+		--chart-purple: var(--purple);
+		--chart-pink: var(--pink);
+		--chart-orange: var(--orange);
+		--chart-teal: var(--teal);
+		--chart-grid: rgba(34, 41, 62, 0.08);
+		--chart-axis: rgba(34, 41, 62, 0.16);
+		--chart-label: var(--text-muted);
+
+		/* Scrollbar */
+		--scrollbar-track: rgb(190, 192, 220);
+		--scrollbar-thumb: rgb(145, 150, 173);
+		--scrollbar-thumb-hover: rgb(128, 134, 158);
+		--scrollbar-thumb-active: rgb(111, 117, 141);
+
+		/* Gradients */
+		--gradient-primary: linear-gradient(135deg, rgb(63, 98, 211), rgb(91, 121, 221));
+		--gradient-surface: linear-gradient(180deg, rgb(188, 194, 225), rgb(172, 179, 217));
+		--gradient-dark: linear-gradient(180deg, rgb(172, 179, 217), rgb(200, 200, 230));
+		--gradient-primary-soft: linear-gradient(135deg, rgba(63, 98, 211, 0.18), rgba(63, 98, 211, 0.04));
 	}
 }
