@@ -34,7 +34,6 @@ interface GoogleUser {
 }
 
 const GOOGLE_CLIENT_ID = "608117489686-0chu2epsol2omo8hvst8sm3deblcthum.apps.googleusercontent.com";
-const NAVIGATION_STEP_MS = 200;
 
 const pages = {
 	home: {
@@ -57,71 +56,10 @@ const pages = {
 	}
 } as const;
 type Page = keyof typeof pages;
-const pageEntries = Object.entries(pages) as [Page, (typeof pages)[Page]][];
 
 function AppContent(): React.JSX.Element {
 	const auth = useUserAuth();
 	const [currentPage, setCurrentPage] = React.useState<Page>("home");
-	const currentPageRef = React.useRef<Page>(currentPage);
-	const navigationTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-	const navigationTarget = React.useRef<Page | null>(null);
-
-	React.useEffect(() => {
-		currentPageRef.current = currentPage;
-	}, [currentPage]);
-
-	React.useEffect(() => {
-		return () => {
-			if (navigationTimer.current !== null) {
-				clearTimeout(navigationTimer.current);
-			}
-		};
-	}, []);
-
-	const onNavigate = React.useCallback((targetPage: Page): void => {
-		navigationTarget.current = targetPage;
-
-		if (targetPage === currentPageRef.current) {
-			if (navigationTimer.current !== null) {
-				clearTimeout(navigationTimer.current);
-				navigationTimer.current = null;
-			}
-
-			navigationTarget.current = null;
-			return;
-		}
-
-		if (navigationTimer.current !== null) {
-			return;
-		}
-
-		const advance = (): void => {
-			navigationTimer.current = null;
-
-			const currentIndex = pageEntries.findIndex(([page]) => page === currentPageRef.current);
-			const targetIndex = pageEntries.findIndex(([page]) => page === navigationTarget.current);
-
-			if (currentIndex < 0 || targetIndex < 0 || currentIndex === targetIndex) {
-				navigationTarget.current = null;
-				return;
-			}
-
-			const direction = targetIndex > currentIndex ? 1 : -1;
-			const nextPage = pageEntries[currentIndex + direction][0];
-
-			currentPageRef.current = nextPage;
-			setCurrentPage(nextPage);
-
-			if (nextPage === navigationTarget.current) {
-				navigationTarget.current = null;
-				return;
-			}
-
-			navigationTimer.current = setTimeout(advance, NAVIGATION_STEP_MS);
-		};
-
-		advance();
-	}, []);
 
 	if (!auth.authenticated) {
 		return <Authentication />;
@@ -130,8 +68,8 @@ function AppContent(): React.JSX.Element {
 	return (
 		<div className="app">
 			<AppBar />
-			<Container pages={pages} currentPage={currentPage} onNavigate={onNavigate} />
-			<Tab pages={pages} currentPage={currentPage} onNavigate={onNavigate} />
+			<Container pages={pages} currentPage={currentPage} onNavigate={setCurrentPage} />
+			<Tab pages={pages} currentPage={currentPage} onNavigate={setCurrentPage} />
 		</div>
 	);
 }

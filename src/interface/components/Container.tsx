@@ -15,9 +15,12 @@ interface ContainerProps<T extends string> {
 	readonly onProgress?: (progress: number) => void;
 }
 
+const PAGE_TRANSITION_MS = 200;
+
 function Container<T extends string>({ pages, currentPage, onNavigate, onProgress }: ContainerProps<T>): React.JSX.Element {
 	const pageEntries = Object.entries(pages) as [T, PageConfig][];
 	const currentIndex = pageEntries.findIndex(([page]) => page === currentPage);
+	const previousIndex = React.useRef(currentIndex);
 	const [dragOffset, setDragOffset] = React.useState(0);
 	const touchStart = React.useRef({ x: 0, y: 0 });
 	const touchCurrent = React.useRef({ x: 0, y: 0 });
@@ -25,6 +28,13 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 	const horizontalSwipe = React.useRef(false);
 	const interactiveTouch = React.useRef(false);
 	const multiTouch = React.useRef(false);
+
+	const navigationDistance = Math.abs(currentIndex - previousIndex.current);
+	const transitionDuration = navigationDistance > 0 ? navigationDistance * PAGE_TRANSITION_MS : PAGE_TRANSITION_MS;
+
+	React.useEffect(() => {
+		previousIndex.current = currentIndex;
+	}, [currentIndex]);
 
 	const resetTouch = (resetProgress = true): void => {
 		setDragOffset(0);
@@ -82,10 +92,6 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 
 		horizontalSwipe.current = false;
 		multiTouch.current = false;
-
-		if (interactiveTouch.current) {
-			return;
-		}
 	};
 
 	const handleTouchMove = (event: React.TouchEvent<HTMLElement>): void => {
@@ -224,23 +230,31 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 	}, [currentIndex, onNavigate, pageEntries.length]);
 
 	return (
-		<main className="container" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} onTouchCancel={handleTouchCancel}>
+		<main
+			className="container"
+			onTouchStart={handleTouchStart}
+			onTouchMove={handleTouchMove}
+			onTouchEnd={handleTouchEnd}
+			onTouchCancel={handleTouchCancel}>
 			<div
 				className="container-track"
 				style={{
 					transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
-					transition: dragOffset !== 0 ? "none" : "transform 200ms ease"
+					transition:
+						dragOffset !== 0
+							? "none"
+							: `transform ${transitionDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`
 				}}>
 				{pageEntries.map(([page, config]) => (
-					<section
-						key={page}
-						datatype={page}
-						className="container-page"
-						style={{
-							padding: config.padding ? "16px" : "0"
-						}}>
-						{config.component}
-					</section>
+				<section
+					key={page}
+					datatype={page}
+					className="container-page"
+					style={{
+						padding: config.padding ? "16px" : "0"
+					}}>
+					{config.component}
+				</section>
 				))}
 			</div>
 		</main>
