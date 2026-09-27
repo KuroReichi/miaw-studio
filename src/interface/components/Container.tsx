@@ -22,6 +22,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 	const currentIndex = pageEntries.findIndex(([page]) => page === currentPage);
 	const previousIndex = React.useRef(currentIndex);
 	const [dragOffset, setDragOffset] = React.useState(0);
+	const dragOffsetRef = React.useRef(0);
 	const touchStart = React.useRef({ x: 0, y: 0 });
 	const touchCurrent = React.useRef({ x: 0, y: 0 });
 	const activeTouchId = React.useRef<number | null>(null);
@@ -36,8 +37,13 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		previousIndex.current = currentIndex;
 	}, [currentIndex]);
 
+	const setDragPosition = (offset: number): void => {
+		dragOffsetRef.current = offset;
+		setDragOffset(offset);
+	};
+
 	const resetTouch = (resetProgress = true): void => {
-		setDragOffset(0);
+		setDragPosition(0);
 
 		if (resetProgress) {
 			onProgress?.(currentIndex);
@@ -59,11 +65,26 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		multiTouch.current = false;
 	};
 
+	const continueWithTouch = (touch: Touch): void => {
+		activeTouchId.current = touch.identifier;
+		touchStart.current = {
+			x: touch.clientX,
+			y: touch.clientY
+		};
+		touchCurrent.current = {
+			x: touch.clientX,
+			y: touch.clientY
+		};
+		multiTouch.current = false;
+	};
+
 	const handleTouchStart = (event: React.TouchEvent<HTMLElement>): void => {
+		if (event.touches.length === 0) {
+			return;
+		}
+
 		if (activeTouchId.current !== null) {
 			multiTouch.current = true;
-			horizontalSwipe.current = false;
-			setDragOffset(0);
 			return;
 		}
 
@@ -102,8 +123,6 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		if (event.touches.length !== 1) {
 			multiTouch.current = true;
 			horizontalSwipe.current = false;
-			setDragOffset(0);
-			onProgress?.(currentIndex);
 			return;
 		}
 
@@ -138,7 +157,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 			offset = 0;
 		}
 
-		setDragOffset(offset);
+		setDragPosition(offset);
 
 		const containerWidth = event.currentTarget.clientWidth;
 
@@ -163,7 +182,14 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 			return;
 		}
 
-		if (interactiveTouch.current || multiTouch.current) {
+		const remainingTouch = event.touches[0];
+
+		if (remainingTouch) {
+			continueWithTouch(remainingTouch);
+			return;
+		}
+
+		if (interactiveTouch.current) {
 			resetTouch();
 			return;
 		}
@@ -184,7 +210,14 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		resetTouch();
 	};
 
-	const handleTouchCancel = (): void => {
+	const handleTouchCancel = (event: React.TouchEvent<HTMLElement>): void => {
+		const remainingTouch = event.touches[0];
+
+		if (remainingTouch && activeTouchId.current !== null) {
+			continueWithTouch(remainingTouch);
+			return;
+		}
+
 		if (activeTouchId.current !== null) {
 			resetTouch();
 		}
@@ -241,20 +274,20 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 				style={{
 					transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
 					transition:
-						dragOffset !== 0
+						dragOffsetRef.current !== 0
 							? "none"
 							: `transform ${transitionDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`
 				}}>
 				{pageEntries.map(([page, config]) => (
-				<section
-					key={page}
-					datatype={page}
-					className="container-page"
-					style={{
-						padding: config.padding ? "16px" : "0"
-					}}>
-					{config.component}
-				</section>
+					<section
+						key={page}
+						datatype={page}
+						className="container-page"
+						style={{
+							padding: config.padding ? "16px" : "0"
+						}}>
+						{config.component}
+					</section>
 				))}
 			</div>
 		</main>
