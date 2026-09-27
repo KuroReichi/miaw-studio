@@ -1,20 +1,24 @@
 import "@legiun/styles/interface/pages/Home.css";
+import * as MUI from "@mui/material";
+
+const projectImages = import.meta.glob("@legiun/assets/img/projects/*.{png,jpg,jpeg,webp,gif,avif}", {
+	eager: true,
+	query: "?url",
+	import: "default"
+}) as Record<string, string>;
 
 export function Home(): React.JSX.Element {
+	const images = Object.entries(projectImages);
+
 	return (
-		<div className="">
-			<div className="chat-header">
-				<div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-					<span className="icon">person</span>
-					<span>0 Online</span>
-				</div>
-				<span className="icon">lock</span>
-			</div>
-			<a>
-				lorem ipsum dolor sit amet consectetur adipiscing elit voluptas qui dolore soluta eu vel pariatur magna id quidem elit elit
-				maxime in in vero id elit iusto similique ad vero dignissimos exercitation amet dolores aute facilis iusto dolor quo qui
-				dolore et dolor lorem iusto quo optio est mollitia deleniti
-			</a>
+		<div>
+			<MUI.ImageList variant="masonry" cols={3} gap={8}>
+				{images.map(([path, src]) => (
+					<MUI.ImageListItem key={path}>
+						<img src={src} loading="lazy" />
+					</MUI.ImageListItem>
+				))}
+			</MUI.ImageList>
 		</div>
 	);
 }

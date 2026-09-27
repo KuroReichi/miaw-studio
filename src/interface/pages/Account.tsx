@@ -52,13 +52,39 @@ export function Account(): React.JSX.Element {
 							</span>
 						</div>
 						<MUI.Tooltip
-							describeChild={true}
-							arrow={true}
-							placement="auto-start"
-							title="Any action is considered as danger anf cannot be undone once you confirm it."
 							about="danger"
+							title={
+								"All actions inside this box have been marked as dangerous, and cannot be reversed once you confirm them."
+							}
+							describeChild={true}
+							slots={{
+								transition: MUI.Fade
+							}}
+							slotProps={{
+								arrow: {
+									sx: {
+										color: "var(--warning-dark)"
+									}
+								},
+								tooltip: {
+									sx: {
+										fontSize: "12px",
+										fontWeight: "600",
+										color: "var(--white)",
+										textShadow: "var(--text-shadow-sm)",
+										background: "var(--warning-dark)"
+									}
+								},
+								popper: {
+									container: document.querySelector(`section[datatype="account"]`)
+								}
+							}}
+							disableInteractive={true}
+							arrow={true}
+							placement="bottom-end"
 							enterDelay={10}
-							enterTouchDelay={10}>
+							enterTouchDelay={10}
+							autoFocus={true}>
 							<span className="icon">help</span>
 						</MUI.Tooltip>
 					</div>

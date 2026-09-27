@@ -15,7 +15,7 @@ interface ContainerProps<T extends string> {
 	readonly onProgress?: (progress: number) => void;
 }
 
-const PAGE_TRANSITION_MS = 200;
+const PAGE_TRANSITION_MS = 600;
 
 function Container<T extends string>({ pages, currentPage, onNavigate, onProgress }: ContainerProps<T>): React.JSX.Element {
 	const pageEntries = Object.entries(pages) as [T, PageConfig][];
@@ -174,9 +174,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 			return;
 		}
 
-		const activeTouchEnded = Array.from(event.changedTouches).some(
-			({ identifier }) => identifier === activeTouchId.current
-		);
+		const activeTouchEnded = Array.from(event.changedTouches).some(({ identifier }) => identifier === activeTouchId.current);
 
 		if (!activeTouchEnded) {
 			return;
@@ -273,10 +271,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 				className="container-track"
 				style={{
 					transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
-					transition:
-						dragOffsetRef.current !== 0
-							? "none"
-							: `transform ${transitionDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`
+					transition: dragOffsetRef.current !== 0 ? "none" : `transform ${transitionDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`
 				}}>
 				{pageEntries.map(([page, config]) => (
 					<section

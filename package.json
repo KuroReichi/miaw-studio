@@ -12,12 +12,12 @@
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.1",
-		"@material-design-icons/svg": "^0.14.15",
 		"@mui/material": "^9.4.0",
 		"@react-oauth/google": "^0.13.5",
 		"eruda": "latest",
 		"firebase": "^12.17.1",
 		"jwt-decode": "^4.0.0",
+		"material-icon-theme": "^5.38.1",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8"
 	},
@@ -33,5 +33,9 @@
 		"oxlint": "^1.75.0",
 		"typescript": "~6.0.2",
 		"vite": "latest"
+	},
+	"allowScripts": {
+		"@firebase/util@1.15.2": true,
+		"protobufjs@7.6.5": true
 	}
 }
