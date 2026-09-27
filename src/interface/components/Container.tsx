@@ -21,22 +21,54 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 	const [dragOffset, setDragOffset] = React.useState(0);
 	const touchStart = React.useRef({ x: 0, y: 0 });
 	const touchCurrent = React.useRef({ x: 0, y: 0 });
+	const activeTouchId = React.useRef<number | null>(null);
 	const horizontalSwipe = React.useRef(false);
 	const interactiveTouch = React.useRef(false);
+	const multiTouch = React.useRef(false);
+
+	const resetTouch = (resetProgress = true): void => {
+		setDragOffset(0);
+
+		if (resetProgress) {
+			onProgress?.(currentIndex);
+		}
+
+		touchStart.current = {
+			x: 0,
+			y: 0
+		};
+
+		touchCurrent.current = {
+			x: 0,
+			y: 0
+		};
+
+		activeTouchId.current = null;
+		horizontalSwipe.current = false;
+		interactiveTouch.current = false;
+		multiTouch.current = false;
+	};
 
 	const handleTouchStart = (event: React.TouchEvent<HTMLElement>): void => {
-		const target = event.target as HTMLElement;
-
-		interactiveTouch.current = Boolean(
-			target.closest("input, textarea, select, button, a, [role='button'], [role='slider'], [contenteditable='true']")
-		);
-
-		if (interactiveTouch.current) {
+		if (activeTouchId.current !== null) {
+			multiTouch.current = true;
 			horizontalSwipe.current = false;
+			setDragOffset(0);
+			return;
+		}
+
+		if (event.touches.length !== 1) {
+			multiTouch.current = true;
 			return;
 		}
 
 		const touch = event.touches[0];
+		activeTouchId.current = touch.identifier;
+
+		const target = event.target as HTMLElement;
+		interactiveTouch.current = Boolean(
+			target.closest("input, textarea, select, button, a, [role='button'], [role='slider'], [contenteditable='true']")
+		);
 
 		touchStart.current = {
 			x: touch.clientX,
@@ -49,14 +81,31 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		};
 
 		horizontalSwipe.current = false;
-	};
+		multiTouch.current = false;
 
-	const handleTouchMove = (event: React.TouchEvent<HTMLElement>): void => {
 		if (interactiveTouch.current) {
 			return;
 		}
+	};
 
-		const touch = event.touches[0];
+	const handleTouchMove = (event: React.TouchEvent<HTMLElement>): void => {
+		if (interactiveTouch.current || activeTouchId.current === null) {
+			return;
+		}
+
+		if (event.touches.length !== 1) {
+			multiTouch.current = true;
+			horizontalSwipe.current = false;
+			setDragOffset(0);
+			onProgress?.(currentIndex);
+			return;
+		}
+
+		const touch = Array.from(event.touches).find(({ identifier }) => identifier === activeTouchId.current);
+
+		if (!touch) {
+			return;
+		}
 
 		touchCurrent.current = {
 			x: touch.clientX,
@@ -80,7 +129,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		let offset = deltaX;
 
 		if ((currentIndex === 0 && deltaX > 0) || (currentIndex === pageEntries.length - 1 && deltaX < 0)) {
-			offset *= 0.2;
+			offset = 0;
 		}
 
 		setDragOffset(offset);
@@ -95,11 +144,21 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		}
 	};
 
-	const handleTouchEnd = (): void => {
-		if (interactiveTouch.current) {
-			interactiveTouch.current = false;
-			horizontalSwipe.current = false;
-			setDragOffset(0);
+	const handleTouchEnd = (event: React.TouchEvent<HTMLElement>): void => {
+		if (activeTouchId.current === null) {
+			return;
+		}
+
+		const activeTouchEnded = Array.from(event.changedTouches).some(
+			({ identifier }) => identifier === activeTouchId.current
+		);
+
+		if (!activeTouchEnded) {
+			return;
+		}
+
+		if (interactiveTouch.current || multiTouch.current) {
+			resetTouch();
 			return;
 		}
 
@@ -116,25 +175,56 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 			}
 		}
 
-		setDragOffset(0);
-		onProgress?.(currentIndex);
-
-		touchStart.current = {
-			x: 0,
-			y: 0
-		};
-
-		touchCurrent.current = {
-			x: 0,
-			y: 0
-		};
-
-		horizontalSwipe.current = false;
-		interactiveTouch.current = false;
+		resetTouch();
 	};
 
+	const handleTouchCancel = (): void => {
+		if (activeTouchId.current !== null) {
+			resetTouch();
+		}
+	};
+
+	React.useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent): void => {
+			if (event.defaultPrevented || event.isComposing) {
+				return;
+			}
+
+			const target = event.target as HTMLElement | null;
+
+			if (
+				target?.closest(
+					"input, textarea, select, button, a, [role='button'], [role='slider'], [role='textbox'], [role='combobox'], [contenteditable='true']"
+				)
+			) {
+				return;
+			}
+
+			if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+				return;
+			}
+
+			event.preventDefault();
+
+			const direction = event.key === "ArrowLeft" ? -1 : 1;
+			const nextIndex = currentIndex + direction;
+
+			if (nextIndex < 0 || nextIndex >= pageEntries.length) {
+				return;
+			}
+
+			onNavigate(pageEntries[nextIndex][0]);
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [currentIndex, onNavigate, pageEntries.length]);
+
 	return (
-		<main className="container" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+		<main className="container" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} onTouchCancel={handleTouchCancel}>
 			<div
 				className="container-track"
 				style={{
