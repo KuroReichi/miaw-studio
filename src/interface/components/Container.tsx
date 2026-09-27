@@ -65,7 +65,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 		multiTouch.current = false;
 	};
 
-	const continueWithTouch = (touch: Touch): void => {
+	const continueWithTouch = (touch: React.Touch): void => {
 		activeTouchId.current = touch.identifier;
 		touchStart.current = {
 			x: touch.clientX,
