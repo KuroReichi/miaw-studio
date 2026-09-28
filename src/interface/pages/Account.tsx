@@ -1,9 +1,11 @@
 import * as Auth from "@legiun/auth/AuthCheck";
 import * as MUI from "@mui/material";
 import "@legiun/styles/interface/pages/Account.css";
+import { useState } from "react";
 
 export function Account(): React.JSX.Element {
 	const user = Auth.getGoogleUser() as import("@legiun/auth/AuthCheck").GoogleUser;
+	const [confirmSignOut, setConfirmSignOut] = useState(false);
 
 	return (
 		<main>
@@ -101,13 +103,31 @@ export function Account(): React.JSX.Element {
 								background: "var(--danger-active)"
 							}}
 							onClick={() => {
-								Auth.clearGoogleAuth();
+								setConfirmSignOut(true);
 							}}>
 							Log-out
 						</MUI.Button>
 					</div>
 				</div>
 			</div>
+			<MUI.Dialog open={confirmSignOut} onClose={() => setConfirmSignOut(false)}>
+				<MUI.DialogTitle>Sign out?</MUI.DialogTitle>
+				<MUI.DialogContent>
+					<MUI.DialogContentText>Are you sure you want to sign out?</MUI.DialogContentText>
+				</MUI.DialogContent>
+				<MUI.DialogActions>
+					<MUI.Button onClick={() => setConfirmSignOut(false)}>Cancel</MUI.Button>
+					<MUI.Button
+						color="error"
+						autoFocus
+						onClick={() => {
+							setConfirmSignOut(false);
+							Auth.clearGoogleAuth();
+						}}>
+						Sign out
+					</MUI.Button>
+				</MUI.DialogActions>
+			</MUI.Dialog>
 		</main>
 	);
 }
