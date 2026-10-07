@@ -2,7 +2,7 @@ import "@legiun/styles/interface/pages/Chat.css";
 import * as MUI from "@mui/material";
 import { getGoogleUser } from "@legiun/auth/AuthCheck";
 import { sendMessage, watchMessages, type ChatMessage } from "@legiun/firebase/api/firestore/chat";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useState } from "react";
 import type { Timestamp } from "firebase/firestore";
 
 function formatDiffDay(epoch: Temporal.Instant) {
@@ -57,6 +57,48 @@ export function Chat(): React.JSX.Element {
 	useEffect(() => {
 		return watchMessages(setMessages);
 	}, []);
+
+	useLayoutEffect(() => {
+		const section = document.querySelector<HTMLElement>(".chat-section");
+
+		if (!section) {
+			return;
+		}
+
+		const updateTimestamp = (message: HTMLElement) => {
+			const timestamp = message.parentElement?.querySelector<HTMLElement>(".timestamp");
+
+			if (!timestamp) {
+				return;
+			}
+
+			const styles = getComputedStyle(message);
+			const fontSize = Number.parseFloat(styles.fontSize);
+			const lineHeight = Number.parseFloat(styles.lineHeight);
+			const resolvedLineHeight = Number.isFinite(lineHeight)
+				? lineHeight
+				: fontSize * 1.2;
+			const messageHeight = message.getBoundingClientRect().height;
+			const lineCount = Math.max(1, Math.round(messageHeight / resolvedLineHeight));
+			const offset = Math.max(0, 12.5 - (lineCount - 1) * 6.25);
+
+			timestamp.style.height = "fit-content";
+			timestamp.style.marginTop = "-" + offset + "px";
+		};
+
+		const observers = Array.from(section.querySelectorAll<HTMLElement>(".message")).map((message) => {
+			const observer = new ResizeObserver(() => updateTimestamp(message));
+
+			observer.observe(message);
+			updateTimestamp(message);
+
+			return observer;
+		});
+
+		return () => {
+			observers.forEach((observer) => observer.disconnect());
+		};
+	}, [messages]);
 
 	const handleSendMessage = async () => {
 		const content = messageValue.trim();
