@@ -100,29 +100,26 @@ section[datatype="chat"] {
 						.message-box {
 							display: flex;
 							justify-content: flex-start;
-							flex-direction: column;
+							align-items: flex-end;
+							gap: 6px;
 
 							.message {
-								margin-bottom: 1.25px;
+								flex: 1;
+								min-width: 0;
 							}
 
 							.timestamp {
 								display: flex;
-								justify-content: right;
-								flex-direction: row;
+								justify-content: flex-end;
 								align-items: center;
-								gap: 10px;
-								margin: 0.75px 0px;
+								flex: 0 0 auto;
 
 								> span.time {
-									margin-top: 1px;
 									color: var(--text-muted);
 									font-size: calc(var(--font-size) - 3px);
-									align-content: center;
 								}
 							}
 						}
-
 						&.chain {
 							margin-top: -10px;
 
