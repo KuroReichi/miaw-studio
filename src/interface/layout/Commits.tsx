@@ -360,7 +360,13 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 							type="number"
 							value={draftSettings.commitsPerPage}
 							min={MIN_COMMITS_PER_PAGE}
-							max={MAX_COMMITS_PER_PAGE}
+							slotProps={{
+								htmlInput: {
+									min: MIN_COMMITS_PER_PAGE,
+									max: MAX_COMMITS_PER_PAGE,
+									step: 1
+								}
+							}}
 							onChange={(event) => {
 								const value = Number(event.target.value);
 
