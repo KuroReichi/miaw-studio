@@ -6,9 +6,9 @@ const token = import.meta.env.GITHUB_API_KEY;
 const CACHE_KEY = "miaw-studio-changelogs-v2";
 const SETTINGS_KEY = "miaw-studio-changelog-settings";
 const CACHE_TIME = 8 * 60 * 1000;
-const MIN_COMMITS_PER_PAGE = 0;
-const MAX_COMMITS_PER_PAGE = 100;
-const DEFAULT_COMMITS_PER_PAGE = 0;
+const PAGE_SIZE_MIN = 25;
+const PAGE_SIZE_MAX = 100;
+const PAGE_SIZE_DEFAULT = 25;
 
 interface CommitsProps {
 	open: boolean;
@@ -43,7 +43,7 @@ interface ChangelogSettings {
 
 const defaultSettings: ChangelogSettings = {
 	useSlider: true,
-	commitsPerPage: DEFAULT_COMMITS_PER_PAGE
+	commitsPerPage: PAGE_SIZE_DEFAULT
 };
 
 export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
@@ -51,7 +51,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	const [commits, setCommits] = useState<Commit[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
-	const [commitsPerPage, setCommitsPerPage] = useState(DEFAULT_COMMITS_PER_PAGE);
+	const [commitsPerPage, setCommitsPerPage] = useState(PAGE_SIZE_DEFAULT);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [settings, setSettings] = useState(defaultSettings);
 	const [draftSettings, setDraftSettings] = useState(defaultSettings);
@@ -75,8 +75,8 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 			const nextSettings: ChangelogSettings = {
 				useSlider: parsed.useSlider !== false,
 				commitsPerPage: Math.min(
-					MAX_COMMITS_PER_PAGE,
-					Math.max(MIN_COMMITS_PER_PAGE, Number(parsed.commitsPerPage) || DEFAULT_COMMITS_PER_PAGE)
+					PAGE_SIZE_MAX,
+					Math.max(PAGE_SIZE_MIN, Number(parsed.commitsPerPage) || PAGE_SIZE_DEFAULT)
 				)
 			};
 
@@ -164,7 +164,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	const saveSettings = (): void => {
 		const nextSettings: ChangelogSettings = {
 			useSlider: draftSettings.useSlider,
-			commitsPerPage: Math.min(MAX_COMMITS_PER_PAGE, Math.max(MIN_COMMITS_PER_PAGE, Math.round(draftSettings.commitsPerPage)))
+			commitsPerPage: Math.min(PAGE_SIZE_MAX, Math.max(PAGE_SIZE_MIN, Math.round(draftSettings.commitsPerPage)))
 		};
 
 		setSettings(nextSettings);
@@ -201,14 +201,52 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 					count={pageCount}
 					page={page}
 					onChange={(_, value) => setPage(value)}
-					color="primary"
+					color="standard"
 					size="small"
 					showFirstButton
 					showLastButton
 					disabled={loading || pageCount <= 1}
+					renderItem={(item) => (
+						<MUI.PaginationItem
+							{...item}
+							sx={{
+								color: "var(--text-primary)",
+								"&:hover": {
+									backgroundColor: "var(--surface-hover)"
+								},
+								"&.Mui-selected": {
+									backgroundColor: "var(--primary)",
+									color: "var(--text-inverse)",
+									"&:hover": {
+										backgroundColor: "var(--primary-hover)"
+									}
+								},
+								"&.Mui-disabled": {
+									color: "var(--text-disabled)"
+								}
+							}}
+						/>
+					)}
+					sx={{
+						"& .MuiPagination-ul": {
+							flexWrap: "wrap",
+							"@media (max-width: 520px)": {
+								flexWrap: "nowrap"
+							}
+						}
+					}}
 				/>
 
-				<MUI.IconButton className="commits-settings" color="inherit" onClick={openSettings} aria-label="Commit display settings">
+				<MUI.IconButton
+				className="commits-settings"
+					onClick={openSettings}
+					aria-label="Commit display settings"
+					sx={{
+						position: "absolute",
+						right: 12,
+						zIndex: 1,
+						color: "var(--text-primary)"
+					}}>
 					<span className="icon">settings</span>
 				</MUI.IconButton>
 			</div>
@@ -304,19 +342,62 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 						}
 					}
 				}}>
-				<MUI.DialogTitle id="commits-settings-title">Commit Display Settings</MUI.DialogTitle>
+				<MUI.DialogTitle
+					id="commits-settings-title"
+					sx={{
+						color: "var(--text-primary)"
+					}}>
+					Commit Display Settings
+				</MUI.DialogTitle>
 
-				<MUI.DialogContent dividers>
+				<MUI.DialogContent
+					dividers
+					sx={{
+						backgroundColor: "var(--surface)",
+						color: "var(--text-primary)",
+						borderColor: "var(--surface-elevated)"
+					}}>
 					<MUI.FormControlLabel
+						sx={{
+							color: "var(--text-primary)"
+						}}
 						control={
 							<MUI.Switch
 								checked={draftSettings.useSlider}
 								onChange={(_, checked) =>
 									setDraftSettings((current) => ({
 										...current,
-										useSlider: checked
+										useSlider: checked,
+										commitsPerPage: checked
+											? Math.min(
+												PAGE_SIZE_MAX,
+												Math.max(
+													PAGE_SIZE_MIN,
+													Math.round(current.commitsPerPage / 5) * 5
+												)
+											)
+											: current.commitsPerPage
 									}))
 								}
+								slotProps={{
+									switchBase: {
+										sx: {
+											color: "var(--text-muted)",
+											"&.Mui-checked": {
+												color: "var(--primary)"
+											}
+										}
+									},
+									track: {
+										sx: {
+											backgroundColor: "var(--surface-elevated)",
+											opacity: 1,
+											".Mui-checked + &": {
+												backgroundColor: "var(--primary)"
+											}
+										}
+									}
+								}}
 							/>
 						}
 						label="Use slider"
@@ -324,14 +405,18 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 
 					{draftSettings.useSlider ? (
 						<div className="commits-slider">
-							<MUI.Typography variant="body2" color="text.secondary">
+							<MUI.Typography
+								variant="body2"
+								sx={{
+									color: "var(--text-secondary)"
+								}}>
 								{draftSettings.commitsPerPage} commits per page
 							</MUI.Typography>
 
 							<MUI.Slider
 								value={draftSettings.commitsPerPage}
-								min={MIN_COMMITS_PER_PAGE}
-								max={MAX_COMMITS_PER_PAGE}
+								min={PAGE_SIZE_MIN}
+								max={PAGE_SIZE_MAX}
 								step={5}
 								marks={[
 									{ value: 25, label: "25" },
@@ -347,6 +432,37 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 										}));
 									}
 								}}
+								sx={{
+									color: "var(--primary)"
+								}}
+								slotProps={{
+									rail: {
+										sx: {
+											backgroundColor: "var(--surface-elevated)",
+											opacity: 1
+										}
+									},
+									track: {
+										sx: {
+											backgroundColor: "var(--primary)"
+										}
+									},
+									thumb: {
+										sx: {
+											backgroundColor: "var(--primary)"
+										}
+									},
+									mark: {
+										sx: {
+											backgroundColor: "var(--surface-raised)"
+										}
+									},
+									markLabel: {
+										sx: {
+											color: "var(--text-muted)"
+										}
+									}
+								}}
 							/>
 						</div>
 					) : (
@@ -357,9 +473,36 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 							value={draftSettings.commitsPerPage}
 							slotProps={{
 								htmlInput: {
-									min: MIN_COMMITS_PER_PAGE,
-									max: MAX_COMMITS_PER_PAGE,
+									min: PAGE_SIZE_MIN,
+									max: PAGE_SIZE_MAX,
 									step: 1
+								},
+								inputLabel: {
+									sx: {
+										color: "var(--text-muted)",
+										"&.Mui-focused": {
+											color: "var(--primary)"
+										}
+									}
+								},
+								input: {
+									sx: {
+										color: "var(--text-primary)",
+										"& .MuiOutlinedInput-notchedOutline": {
+											borderColor: "var(--surface-elevated)"
+										},
+										"&:hover .MuiOutlinedInput-notchedOutline": {
+											borderColor: "var(--border-hover)"
+										},
+										"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+											borderColor: "var(--primary)"
+										}
+									}
+								},
+								formHelperText: {
+									sx: {
+										color: "var(--text-muted)"
+									}
 								}
 							}}
 							onChange={(event) => {
@@ -367,18 +510,37 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 								setDraftSettings((current) => ({
 									...current,
 									commitsPerPage: Number.isFinite(value)
-										? Math.min(MAX_COMMITS_PER_PAGE, Math.max(MIN_COMMITS_PER_PAGE, value))
-										: MIN_COMMITS_PER_PAGE
+										? Math.min(PAGE_SIZE_MAX, Math.max(PAGE_SIZE_MIN, value))
+										: PAGE_SIZE_MIN
 								}));
 							}}
-							helperText={`Enter a value from ${MIN_COMMITS_PER_PAGE} to ${MAX_COMMITS_PER_PAGE}.`}
+							helperText={`Enter a value from ${PAGE_SIZE_MIN} to ${PAGE_SIZE_MAX}.`}
 						/>
 					)}
 				</MUI.DialogContent>
 
-				<MUI.DialogActions>
-					<MUI.Button onClick={closeSettings}>Cancel</MUI.Button>
-					<MUI.Button onClick={saveSettings} variant="contained">
+				<MUI.DialogActions
+					sx={{
+						backgroundColor: "var(--surface)",
+						borderColor: "var(--surface-elevated)"
+					}}>
+					<MUI.Button
+						onClick={closeSettings}
+						sx={{
+							color: "var(--primary)"
+						}}>
+						Cancel
+					</MUI.Button>
+					<MUI.Button
+						onClick={saveSettings}
+						variant="contained"
+						sx={{
+							backgroundColor: "var(--primary)",
+							color: "var(--text-inverse)",
+							"&:hover": {
+								backgroundColor: "var(--primary-hover)"
+							}
+						}}>
 						Save
 					</MUI.Button>
 				</MUI.DialogActions>
