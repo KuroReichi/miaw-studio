@@ -11,11 +11,21 @@
 	box-sizing: border-box;
 	overflow: hidden;
 	background: var(--background);
-	animation: commits-enter 500ms ease forwards;
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(45px);
+
+	&.commits-open {
+		visibility: visible;
+		pointer-events: auto;
+		animation: commits-enter 500ms ease forwards;
+	}
 
 	&.commits-closing {
-		animation: commits-exit 400ms ease forwards;
+		visibility: visible;
 		pointer-events: none;
+		animation: commits-exit 400ms ease forwards;
 	}
 
 	.commits-header {
@@ -64,23 +74,18 @@
 	}
 
 	.commits-pagination {
+		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
 		width: 100%;
-		position: relative;
 		min-height: 56px;
 		padding: 8px 16px;
 		box-sizing: border-box;
 		flex-shrink: 0;
 		background: var(--surface);
 		border-bottom: 1px solid var(--surface-elevated);
-
-		&.commits-pagination-bottom {
-			border-top: 1px solid var(--surface-elevated);
-			border-bottom: 0;
-		}
 
 		.MuiPagination-root {
 			max-width: 100%;
@@ -89,6 +94,7 @@
 		.commits-settings {
 			position: absolute;
 			right: 12px;
+			z-index: 1;
 			color: var(--text);
 		}
 
@@ -102,7 +108,7 @@
 	}
 
 	.commits-list {
-		flex: 1;
+		flex: 1 1 auto;
 		min-height: 0;
 		width: 100%;
 		box-sizing: border-box;
@@ -123,13 +129,6 @@
 				flex-direction: column;
 				gap: 12px;
 				padding: 0 16px 24px;
-
-				.changelog-loading {
-					padding: 30px 20px;
-					color: var(--text-muted);
-					font-size: 13px;
-					text-align: center;
-				}
 
 				.changelog-item {
 					display: flex;
@@ -213,9 +212,17 @@
 				cursor: none;
 				transition: 0.5s ease transform;
 
-			&:hover {
-				color: var(--primary-active);
-				transform: scale(1.1);
+				&:hover {
+					color: var(--primary-active);
+					transform: scale(1.1);
+				}
+			}
+
+			.changelog-loading {
+				padding: 30px 20px;
+				color: var(--text-muted);
+				font-size: 13px;
+				text-align: center;
 			}
 		}
 	}
@@ -260,25 +267,25 @@
 
 @keyframes commits-enter {
 	from {
-		transform: translateY(45px);
 		opacity: 0;
+		transform: translateY(45px);
 	}
 
 	to {
-		transform: translateY(0);
 		opacity: 1;
+		transform: translateY(0);
 	}
 }
 
 @keyframes commits-exit {
 	from {
-		transform: translateY(0);
 		opacity: 1;
+		transform: translateY(0);
 	}
 
 	to {
-		transform: translateY(55px);
 		opacity: 0;
+		transform: translateY(55px);
 	}
 }
 
