@@ -46,6 +46,44 @@ const defaultSettings: ChangelogSettings = {
 	commitsPerPage: PAGE_SIZE_DEFAULT
 };
 
+function formatCommitDate(value: string): string {
+	const date = new Date(value);
+	const now = new Date();
+	const elapsedSeconds = Math.max(1, Math.floor((Date.now() - date.getTime()) / 1000));
+
+	if (elapsedSeconds < 60) {
+		return `${elapsedSeconds} ${elapsedSeconds === 1 ? "second" : "seconds"} ago`;
+	}
+
+	const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+
+	if (elapsedMinutes < 60) {
+		return `${elapsedMinutes} ${elapsedMinutes === 1 ? "minute" : "minutes"} ago`;
+	}
+
+	const elapsedHours = Math.floor(elapsedMinutes / 60);
+
+	if (elapsedHours < 24) {
+		return `${elapsedHours} ${elapsedHours === 1 ? "hour" : "hours"} ago`;
+	}
+
+	if (date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()) {
+		const currentDay = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+		const commitDay = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+		const elapsedDays = Math.floor((currentDay - commitDay) / 86_400_000);
+
+		if (elapsedDays > 0) {
+			return `${elapsedDays} ${elapsedDays === 1 ? "day" : "days"} ago`;
+		}
+	}
+
+	return date.toLocaleDateString("en-GB", {
+		day: "2-digit",
+		month: "long",
+		year: "numeric"
+	});
+}
+
 export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	const [isClosing, setIsClosing] = useState(false);
 	const [commits, setCommits] = useState<Commit[]>([]);
@@ -264,16 +302,10 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 								const separator = message.indexOf(":");
 								const type = separator !== -1 ? message.slice(0, separator) : "commit";
 								const title = separator !== -1 ? message.slice(separator + 1).trim() : message;
-								const date = new Date(commit.commit.author.date);
-
 								return (
 									<article className="changelog-item" key={commit.sha}>
 										<div className="changelog-date">
-											{date.toLocaleDateString("en-GB", {
-												day: "2-digit",
-												month: "long",
-												year: "numeric"
-											})}
+											{formatCommitDate(commit.commit.author.date)}
 										</div>
 
 										<div className="changelog-main">
