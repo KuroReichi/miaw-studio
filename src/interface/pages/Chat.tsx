@@ -90,12 +90,7 @@ export function Chat(): React.JSX.Element {
 							!previousInstant ||
 							currentInstant.toZonedDateTimeISO(Temporal.Now.timeZoneId()).toPlainDate().toString() !==
 								previousInstant.toZonedDateTimeISO(Temporal.Now.timeZoneId()).toPlainDate().toString();
-						const isChain = Boolean(
-							previousMessage &&
-								previousMessage.uid === message.uid &&
-								previousTimestamp &&
-								!isNewDay
-						);
+						const isChain = Boolean(previousMessage && previousMessage.uid === message.uid && previousTimestamp && !isNewDay);
 						const isOwnMessage = message.uid === googleUser?.sub;
 
 						return (
@@ -106,9 +101,7 @@ export function Chat(): React.JSX.Element {
 									</div>
 								)}
 
-								<div
-									data-name={message.uid}
-									className={`bubble ${isOwnMessage ? "bubble-right" : "bubble-left"}`}>
+								<div data-name={message.uid} className={`bubble ${isOwnMessage ? "bubble-right" : "bubble-left"}`}>
 									<div className="profile-picture">
 										{!isChain && message.photoURL && (
 											<img loading="lazy" src={message.photoURL} width="100%" referrerPolicy="no-referrer" />
