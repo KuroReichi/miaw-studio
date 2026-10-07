@@ -67,12 +67,8 @@ function Tab<T extends string>({ pages, currentPage, onNavigate }: NavigationPro
 			<div className="miaw-navbar-indicator" />
 
 			{pageEntries.map(([page, navigation]) => (
-				<div
-					key={page}
-					datatype="nav-page"
-					className={visualPage === page ? "active" : ""}
-					onClick={() => onNavigate(page)}>
-					<span className="icon material-symbols-rounded">{navigation.icon}</span>
+				<div key={page} datatype="nav-page" className={visualPage === page ? "active" : ""} onClick={() => onNavigate(page)}>
+					<span className="icon">{navigation.icon}</span>
 					<span className="label">{navigation.label}</span>
 				</div>
 			))}

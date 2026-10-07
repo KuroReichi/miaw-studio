@@ -16,7 +16,19 @@ function AppBar(): React.JSX.Element {
 					arrow={true}
 					title="Commit History"
 					enterDelay={100}
-					enterTouchDelay={100}>
+					enterTouchDelay={100}
+					slotProps={{
+						popper: {
+							modifiers: [
+								{
+									name: "offset",
+									options: {
+										offset: [0, -16]
+									}
+								}
+							]
+						}
+					}}>
 					<button className="icon-button" onClick={() => setCommitsOpen(true)} aria-label="commits">
 						<span className="icon">deployed_code_history</span>
 					</button>

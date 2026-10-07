@@ -8,7 +8,7 @@
 	margin: 0 -50px;
 	padding: 12.5px calc(12.5px + 50px);
 	transition: all 0.4s ease;
-	box-shadow: var(--shadow);
+	box-shadow: 8px 8px 10px var(--backdrop);
 	button .icon {
 		text-shadow: var(--text-shadow-lg);
 	}

@@ -116,6 +116,14 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 	};
 
 	const handleTouchMove = (event: React.TouchEvent<HTMLElement>): void => {
+		const target = event.target as HTMLElement;
+		const isScrollLock = target.dataset.scrollLock === "true";
+
+		if (isScrollLock) {
+			event.preventDefault();
+			return;
+		}
+
 		if (interactiveTouch.current || activeTouchId.current === null) {
 			return;
 		}
@@ -285,7 +293,7 @@ function Container<T extends string>({ pages, currentPage, onNavigate, onProgres
 					</section>
 				))}
 			</div>
-		</main>
+		</main >
 	);
 }
 

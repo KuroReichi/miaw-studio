@@ -9,10 +9,9 @@ import "@legiun/styles/animations/LoadingAnimation.css";
 import AppBar from "@legiun/components/AppBar";
 import Container from "@legiun/components/Container";
 import Tab from "@legiun/components/TabNavigation";
-import Overlay from "@legiun/components/Overlay";
 
 import { Home } from "@legiun/pages/Home";
-import { Projects } from "@legiun/pages/Projects";
+import { Chat } from "@legiun/pages/Chat";
 import { Account } from "@legiun/pages/Account";
 
 interface GoogleUser {
@@ -36,17 +35,17 @@ interface GoogleUser {
 const GOOGLE_CLIENT_ID = "608117489686-0chu2epsol2omo8hvst8sm3deblcthum.apps.googleusercontent.com";
 
 const pages = {
-	home: {
-		icon: "home",
-		label: "Home",
+	hall: {
+		icon: "museum",
+		label: "Hall of Kawaiiness",
 		padding: true,
 		component: <Home />
 	},
-	projects: {
-		icon: "folder_code",
-		label: "Projects",
-		padding: true,
-		component: <Projects />
+	chat: {
+		icon: "globe",
+		label: "Global Chat",
+		padding: false,
+		component: <Chat />
 	},
 	account: {
 		icon: "settings_account_box",
@@ -59,7 +58,7 @@ type Page = keyof typeof pages;
 
 function AppContent(): React.JSX.Element {
 	const auth = useUserAuth();
-	const [currentPage, setCurrentPage] = React.useState<Page>("home");
+	const [currentPage, setCurrentPage] = React.useState<Page>("hall");
 
 	if (!auth.authenticated) {
 		return <Authentication />;
@@ -77,6 +76,27 @@ function AppContent(): React.JSX.Element {
 async function delay(time?: number) {
 	return new Promise((resolve) => setTimeout(() => resolve(true), time ?? Math.random() * 350));
 }
+
+async function imageToBase64(url: string): Promise<string> {
+	const response = await fetch(url);
+
+	console.log(response.url);
+	console.log(response.headers.get("content-type"));
+
+	const blob = await response.blob();
+
+	console.log(blob.type, blob.size);
+
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = reject;
+
+		reader.readAsDataURL(blob);
+	});
+}
+
 function App(): React.JSX.Element {
 	const [hidden, setHide] = React.useState(false);
 	const [body, setBody] = React.useState("Checking Authentication State...");
@@ -94,6 +114,9 @@ function App(): React.JSX.Element {
 				if (user?.email_verified) {
 					setBody("Account Retrived");
 				}
+
+				const base64 = await imageToBase64(user.picture);
+				localStorage.setItem("profile_picture", base64);
 
 				await delay();
 				setBody("Preparing Resources...");
@@ -118,7 +141,6 @@ function App(): React.JSX.Element {
 				<span datatype="body">{body}</span>
 			</div>
 			<AppContent />
-			<Overlay />
 		</GoogleOAuthProvider>
 	);
 }
