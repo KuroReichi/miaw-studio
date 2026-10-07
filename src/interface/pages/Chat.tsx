@@ -2,7 +2,7 @@ import "@legiun/styles/interface/pages/Chat.css";
 import * as MUI from "@mui/material";
 import { getGoogleUser } from "@legiun/auth/AuthCheck";
 import { sendMessage, watchMessages, type ChatMessage } from "@legiun/firebase/api/firestore/chat";
-import { Fragment, useEffect, useLayoutEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import type { Timestamp } from "firebase/firestore";
 
 function formatDiffDay(epoch: Temporal.Instant) {
@@ -58,44 +58,6 @@ export function Chat(): React.JSX.Element {
 		return watchMessages(setMessages);
 	}, []);
 
-	useLayoutEffect(() => {
-		const section = document.querySelector<HTMLElement>(".chat-section");
-
-		if (!section) {
-			return;
-		}
-
-		const updateTimestamp = (message: HTMLElement) => {
-			const timestamp = message.parentElement?.querySelector<HTMLElement>(".timestamp");
-
-			if (!timestamp) {
-				return;
-			}
-
-			const range = document.createRange();
-			range.selectNodeContents(message);
-			const lineCount = new Set(
-				Array.from(range.getClientRects()).map((rect) => Math.round(rect.top))
-			).size;
-			range.detach();
-
-			const offset = lineCount === 1 ? 12.5 : lineCount === 2 ? 6.25 : 0;
-			timestamp.style.marginTop = "-" + offset + "px";
-		};
-
-		const observers = Array.from(section.querySelectorAll<HTMLElement>(".message")).map((message) => {
-			const observer = new ResizeObserver(() => updateTimestamp(message));
-
-			observer.observe(message);
-			updateTimestamp(message);
-
-			return observer;
-		});
-
-		return () => {
-			observers.forEach((observer) => observer.disconnect());
-		};
-	}, [messages]);
 	const handleSendMessage = async () => {
 		const content = messageValue.trim();
 
