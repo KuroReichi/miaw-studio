@@ -2,8 +2,9 @@
 	--sans: system-ui, "Segoe UI", Roboto, sans-serif;
 	--heading: system-ui, "Segoe UI", Roboto, sans-serif;
 	--mono: ui-monospace, Consolas, monospace;
+	--font-size: 11px;
 
-	font: 18px/145% var(--sans);
+	font: 16px/145% var(--sans);
 	letter-spacing: 0.18px;
 	color-scheme: light dark;
 	color: var(--text-primary);
@@ -14,7 +15,7 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	@media (max-width: 1024px) {
-		font-size: 12px;
+		font-size: var(--font-size);
 	}
 }
 
@@ -48,6 +49,9 @@ body {
 }
 
 .icon-button {
+	min-width: fit-content;
+	min-height: fit-content;
+
 	position: relative;
 	overflow: hidden;
 
@@ -62,4 +66,9 @@ body {
 	cursor: pointer;
 	user-select: none;
 	-webkit-tap-highlight-color: transparent;
+	transition: 0.7s ease background;
+
+	&:active {
+		background: rgba(0, 0, 0, 0.3);
+	}
 }

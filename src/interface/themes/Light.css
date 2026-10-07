@@ -162,7 +162,7 @@
 		--pressed-overlay: rgba(34, 41, 62, 0.12);
 
 		/* Shadow */
-		--shadow-color: rgba(18, 16, 33, 0.12);
+		--shadow-color: rgba(18, 16, 33, 0.18);
 		--shadow-xs: rgba(0, 0, 0, 0.06) 0 1px 2px;
 		--shadow-sm: rgba(0, 0, 0, 0.08) 0 2px 6px -2px;
 		--shadow: rgba(0, 0, 0, 0.14) 0 10px 18px -6px, rgba(0, 0, 0, 0.08) 0 4px 8px -2px;
