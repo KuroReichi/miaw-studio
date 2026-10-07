@@ -20,7 +20,7 @@
 		transform 500ms ease,
 		visibility 0s linear 500ms;
 
-	.footer {
+	.commits-footer {
 		flex-shrink: 0;
 		width: 100%;
 		box-sizing: border-box;
@@ -117,23 +117,9 @@
 		background: var(--surface);
 		border-bottom: 1px solid var(--surface-elevated);
 
-		.MuiPagination-root {
-			max-width: 100%;
-		}
-
-		.commits-settings {
-			position: absolute;
-			right: 12px;
-			z-index: 1;
-			color: var(--text);
-		}
 
 		@media (max-width: 520px) {
 			padding-right: 52px;
-
-			.MuiPagination-ul {
-				flex-wrap: nowrap;
-			}
 		}
 	}
 
@@ -257,13 +243,6 @@
 			}
 		}
 
-		.commits-slider {
-			display: flex;
-			flex-direction: column;
-			gap: 16px;
-			padding: 12px 8px 20px;
-		}
-
 		@media (max-width: 520px) {
 			.commits-list {
 				padding-inline: 0;
@@ -277,6 +256,13 @@
 				padding-inline: 12px;
 			}
 		}
+	}
+
+	.commits-slider {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding: 12px 8px 20px;
 	}
 
 	@keyframes commits-close-enter {
