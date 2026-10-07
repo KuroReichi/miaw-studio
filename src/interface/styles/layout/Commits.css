@@ -20,6 +20,22 @@
 		transform 500ms ease,
 		visibility 0s linear 500ms;
 
+	.footer {
+		flex-shrink: 0;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 14px 15px;
+		background: var(--surface);
+		border-top: 1px solid var(--surface-elevated);
+		font-size: 13px;
+		text-align: center;
+		color: var(--text-muted);
+
+		a {
+			color: var(--primary);
+		}
+	}
+
 	&.commits-open {
 		visibility: visible;
 		opacity: 1;
@@ -212,81 +228,66 @@
 							font-size: 10px;
 						}
 					}
-			}
+				}
 
-			.changelog-link {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				margin-top: 12px;
-				color: var(--primary);
-				font-size: 11px;
-				font-weight: 500;
-				text-decoration: none;
-				cursor: none;
-				transition: 0.5s ease transform;
+				.changelog-link {
+					display: inline-flex;
+					align-items: center;
+					gap: 4px;
+					margin-top: 12px;
+					color: var(--primary);
+					font-size: 11px;
+					font-weight: 500;
+					text-decoration: none;
+					cursor: none;
+					transition: 0.5s ease transform;
 
-				&:hover {
-					color: var(--primary-active);
-					transform: scale(1.1);
+					&:hover {
+						color: var(--primary-active);
+						transform: scale(1.1);
+					}
+				}
+
+				.changelog-loading {
+					padding: 30px 20px;
+					color: var(--text-muted);
+					font-size: 13px;
+					text-align: center;
 				}
 			}
+		}
 
-			.changelog-loading {
-				padding: 30px 20px;
-				color: var(--text-muted);
-				font-size: 13px;
-				text-align: center;
+		.commits-slider {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+			padding: 12px 8px 20px;
+		}
+
+		@media (max-width: 520px) {
+			.commits-list {
+				padding-inline: 0;
+			}
+
+			.commits-content {
+				max-width: none;
+			}
+
+			.changelog-list {
+				padding-inline: 12px;
 			}
 		}
 	}
 
-	.footer {
-		flex-shrink: 0;
-		width: 100%;
-		box-sizing: border-box;
-		padding: 14px 15px;
-		background: var(--surface);
-		border-top: 1px solid var(--surface-elevated);
-		font-size: 13px;
-		text-align: center;
-		color: var(--text-muted);
-
-		a {
-			color: inherit;
-		}
-	}
-
-	.commits-slider {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		padding: 12px 8px 20px;
-	}
-
-	@media (max-width: 520px) {
-		.commits-list {
-			padding-inline: 0;
+	@keyframes commits-close-enter {
+		from {
+			opacity: 0;
+			transform: rotate(-180deg);
 		}
 
-		.commits-content {
-			max-width: none;
+		to {
+			opacity: 1;
+			transform: rotate(0deg);
 		}
-
-		.changelog-list {
-			padding-inline: 12px;
-		}
-	}
-}
-
-@keyframes commits-close-enter {
-	from {
-		opacity: 0;
-		transform: rotate(-180deg);
-	}
-
-	to {
-		opacity: 1;
-		transform: rotate(0deg);
 	}
 }

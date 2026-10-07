@@ -82,7 +82,6 @@ section[datatype="chat"] {
 						background: var(--surface-soft);
 						box-shadow: 5px 3px 8px rgba(0, 0, 0, 0.2);
 						padding: 8px;
-						padding-bottom: 2.5px;
 
 						.bubble-header {
 							display: flex;
@@ -92,7 +91,7 @@ section[datatype="chat"] {
 							align-items: center;
 
 							span[datatype="display-name"] {
-								font-size: calc(var(--font-size) + 1px);
+								font-size: calc(var(--font-size) - 0.75px);
 								font-weight: 600;
 							}
 						}
@@ -101,7 +100,7 @@ section[datatype="chat"] {
 							display: flex;
 							justify-content: flex-start;
 							align-items: flex-end;
-							gap: 6px;
+							gap: 8px;
 
 							.message {
 								flex: 1;
@@ -113,6 +112,7 @@ section[datatype="chat"] {
 								justify-content: flex-end;
 								align-items: center;
 								flex: 0 0 auto;
+								transform: translateY(6px);
 
 								> span.time {
 									color: var(--text-muted);

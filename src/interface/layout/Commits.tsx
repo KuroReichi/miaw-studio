@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as MUI from "@mui/material";
 import "@legiun/styles/layout/Commits.css";
 
@@ -6,9 +6,9 @@ const token = import.meta.env.GITHUB_API_KEY;
 const CACHE_KEY = "miaw-studio-changelogs-v2";
 const SETTINGS_KEY = "miaw-studio-changelog-settings";
 const CACHE_TIME = 8 * 60 * 1000;
-const MIN_COMMITS_PER_PAGE = 25;
+const MIN_COMMITS_PER_PAGE = 0;
 const MAX_COMMITS_PER_PAGE = 100;
-const DEFAULT_COMMITS_PER_PAGE = 25;
+const DEFAULT_COMMITS_PER_PAGE = 0;
 
 interface CommitsProps {
 	open: boolean;
@@ -55,6 +55,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [settings, setSettings] = useState(defaultSettings);
 	const [draftSettings, setDraftSettings] = useState(defaultSettings);
+	const mainRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		if (open) {
@@ -91,28 +92,21 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 		const loadChangelogs = async (): Promise<void> => {
 			try {
 				const cached = localStorage.getItem(CACHE_KEY);
-
 				if (cached) {
 					const parsed = JSON.parse(cached) as CachedChangelogs;
 
-					if (
-						Date.now() - parsed.timestamp < CACHE_TIME &&
-						Array.isArray(parsed.data)
-					) {
+					if (Date.now() - parsed.timestamp < CACHE_TIME && Array.isArray(parsed.data)) {
 						setCommits(parsed.data);
 						return;
 					}
 				}
 
-				const response = await fetch(
-					"https://api.github.com/repos/KuroReichi/miaw-studio/commits?per_page=100",
-					{
-						headers: {
-							Authorization: token ? `Bearer ${token}` : "",
-							Accept: "application/vnd.github+json"
-						}
+				const response = await fetch("https://api.github.com/repos/KuroReichi/miaw-studio/commits?per_page=100", {
+					headers: {
+						Authorization: token ? `Bearer ${token}` : "",
+						Accept: "application/vnd.github+json"
 					}
-				);
+				});
 
 				if (!response.ok) {
 					throw new Error(`Failed to fetch commits: ${response.status}`);
@@ -155,10 +149,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	}, [commitsPerPage]);
 
 	const pageCount = Math.max(1, Math.ceil(commits.length / commitsPerPage));
-	const visibleCommits = commits.slice(
-		(page - 1) * commitsPerPage,
-		page * commitsPerPage
-	);
+	const visibleCommits = commits.slice((page - 1) * commitsPerPage, page * commitsPerPage);
 
 	const openSettings = (): void => {
 		setDraftSettings(settings);
@@ -173,13 +164,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	const saveSettings = (): void => {
 		const nextSettings: ChangelogSettings = {
 			useSlider: draftSettings.useSlider,
-			commitsPerPage: Math.min(
-				MAX_COMMITS_PER_PAGE,
-				Math.max(
-					MIN_COMMITS_PER_PAGE,
-					Math.round(draftSettings.commitsPerPage)
-				)
-			)
+			commitsPerPage: Math.min(MAX_COMMITS_PER_PAGE, Math.max(MIN_COMMITS_PER_PAGE, Math.round(draftSettings.commitsPerPage)))
 		};
 
 		setSettings(nextSettings);
@@ -197,7 +182,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	};
 
 	return (
-		<div className={`commits${open ? " commits-open" : ""}${isClosing ? " commits-closing" : ""}`}>
+		<div ref={mainRef} className={`commits${open ? " commits-open" : ""}${isClosing ? " commits-closing" : ""}`}>
 			<header className="commits-header">
 				<h3>Commit Changelogs</h3>
 
@@ -216,18 +201,14 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 					count={pageCount}
 					page={page}
 					onChange={(_, value) => setPage(value)}
-						color="primary"
+					color="primary"
 					size="small"
 					showFirstButton
 					showLastButton
 					disabled={loading || pageCount <= 1}
 				/>
 
-				<MUI.IconButton
-					className="commits-settings"
-					color="inherit"
-					onClick={openSettings}
-					aria-label="Commit display settings">
+				<MUI.IconButton className="commits-settings" color="inherit" onClick={openSettings} aria-label="Commit display settings">
 					<span className="icon">settings</span>
 				</MUI.IconButton>
 			</div>
@@ -263,23 +244,13 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 											<h2>{title.charAt(0).toUpperCase() + title.slice(1)}</h2>
 
 											<div className="changelog-meta">
-												{commit.author?.avatar_url && (
-													<img
-														loading="lazy"
-														src={commit.author.avatar_url}
-														alt=""
-													/>
-												)}
+												{commit.author?.avatar_url && <img loading="lazy" src={commit.author.avatar_url} alt="" />}
 												<span>{commit.author?.login ?? commit.commit.author.name}</span>
 												<span>•</span>
 												<code>{commit.sha.slice(0, 7)}</code>
 											</div>
 
-											<a
-												className="changelog-link"
-												href={commit.html_url}
-												target="_blank"
-												rel="noopener noreferrer">
+											<a className="changelog-link" href={commit.html_url} target="_blank" rel="noopener noreferrer">
 												View commit
 												<span>↗</span>
 											</a>
@@ -292,9 +263,10 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 				</div>
 			</main>
 
-
 			<footer className="footer">
-				<div>© MIAW Studio 2026 - <a href="#">Apache-2.0</a></div>
+				<div>
+					© MIAW Studio 2026 - <a href="#">Apache-2.0</a>
+				</div>
 			</footer>
 
 			<MUI.Dialog
@@ -303,7 +275,35 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 				onClose={closeSettings}
 				fullWidth
 				maxWidth="xs"
-				aria-labelledby="commits-settings-title">
+				container={mainRef.current}
+				aria-labelledby="commits-settings-title"
+				slots={{
+					transition: MUI.Fade
+				}}
+				slotProps={{
+					transition: {
+						timeout: 100
+					},
+					paper: {
+						sx: {
+							background: "var(--surface)",
+							color: "var(--text-primary)",
+							borderRadius: "8px",
+							boxShadow: "8px 8px 10px var(--backdrop)",
+							minWidth: "320px",
+							maxWidth: "420px",
+							userSelect: "none"
+						}
+					},
+					container: {
+						"data-scroll-lock": "true"
+					} as React.HTMLAttributes<HTMLDivElement>,
+					backdrop: {
+						sx: {
+							background: "var(--backdrop-heavy)"
+						}
+					}
+				}}>
 				<MUI.DialogTitle id="commits-settings-title">Commit Display Settings</MUI.DialogTitle>
 
 				<MUI.DialogContent dividers>
@@ -355,7 +355,6 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 							label="Commits per page"
 							type="number"
 							value={draftSettings.commitsPerPage}
-							min={MIN_COMMITS_PER_PAGE}
 							slotProps={{
 								htmlInput: {
 									min: MIN_COMMITS_PER_PAGE,
@@ -365,7 +364,6 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 							}}
 							onChange={(event) => {
 								const value = Number(event.target.value);
-
 								setDraftSettings((current) => ({
 									...current,
 									commitsPerPage: Number.isFinite(value)
@@ -373,14 +371,16 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 										: MIN_COMMITS_PER_PAGE
 								}));
 							}}
-							helpperText={`Enter a value from ${MIN_COMMITS_PER_PAGE} to ${MAX_COMMITS_PER_PAGE}.`}
+							helperText={`Enter a value from ${MIN_COMMITS_PER_PAGE} to ${MAX_COMMITS_PER_PAGE}.`}
 						/>
 					)}
 				</MUI.DialogContent>
 
 				<MUI.DialogActions>
 					<MUI.Button onClick={closeSettings}>Cancel</MUI.Button>
-					<MUI.Button onClick={saveSettings} variant="contained">Save</MUI.Button>
+					<MUI.Button onClick={saveSettings} variant="contained">
+						Save
+					</MUI.Button>
 				</MUI.DialogActions>
 			</MUI.Dialog>
 		</div>
