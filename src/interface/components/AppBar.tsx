@@ -35,7 +35,7 @@ function AppBar(): React.JSX.Element {
 				</Tooltip>
 			</div>
 
-			{commitsOpen && createPortal(<Commits onClose={() => setCommitsOpen(false)} />, document.body)}
+			{createPortal(<Commits open={commitsOpen} onClose={() => setCommitsOpen(false)} />, document.body)}
 		</>
 	);
 }
