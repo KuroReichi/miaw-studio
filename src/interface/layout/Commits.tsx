@@ -6,11 +6,12 @@ const token = import.meta.env.GITHUB_API_KEY;
 const CACHE_KEY = "miaw-studio-changelogs-v2";
 const SETTINGS_KEY = "miaw-studio-changelog-settings";
 const CACHE_TIME = 8 * 60 * 1000;
-const MIN_COMMITS_PER_PAGE = 5;
+const MIN_COMMITS_PER_PAGE = 25;
 const MAX_COMMITS_PER_PAGE = 100;
 const DEFAULT_COMMITS_PER_PAGE = 25;
 
 interface CommitsProps {
+	open: boolean;
 	onClose: () => void;
 }
 
@@ -45,7 +46,7 @@ const defaultSettings: ChangelogSettings = {
 	commitsPerPage: DEFAULT_COMMITS_PER_PAGE
 };
 
-export function Commits({ onClose }: CommitsProps): React.JSX.Element {
+export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 	const [isClosing, setIsClosing] = useState(false);
 	const [commits, setCommits] = useState<Commit[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -54,6 +55,12 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [settings, setSettings] = useState(defaultSettings);
 	const [draftSettings, setDraftSettings] = useState(defaultSettings);
+
+	useEffect(() => {
+		if (open) {
+			setIsClosing(false);
+		}
+	}, [open]);
 
 	useEffect(() => {
 		const cached = localStorage.getItem(SETTINGS_KEY);
@@ -190,7 +197,7 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 	};
 
 	return (
-		<div className={`commits${isClosing ? " commits-closing" : ""}`}>
+		<div className={`commits${open ? " commits-open" : ""}${isClosing ? " commits-closing" : ""}`}>
 			<header className="commits-header">
 				<h3>Commit Changelogs</h3>
 
@@ -285,18 +292,6 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 				</div>
 			</main>
 
-			<div className="commits-pagination commits-pagination-bottom">
-				<MUI.Pagination
-					count={pageCount}
-					page={page}
-					onChange={(_, value) => setPage(value)}
-					color="primary"
-					size="small"
-					showFirstButton
-					showLastButton
-					disabled={loading || pageCount <= 1}
-				/>
-			</div>
 
 			<footer className="footer">
 				<div>© MIAW Studio 2026 - <a href="#">Apache-2.0</a></div>
@@ -304,6 +299,7 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 
 			<MUI.Dialog
 				open={settingsOpen}
+				keepMounted={true}
 				onClose={closeSettings}
 				fullWidth
 				maxWidth="xs"
