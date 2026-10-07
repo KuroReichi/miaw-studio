@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "@legiun/styles/layout/Commits.css";
 
+const token = import.meta.env.GITHUB_API_KEY;
+
 interface CommitsProps {
 	onClose: () => void;
 }
@@ -28,7 +30,7 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 
 	useEffect(() => {
 		const CACHE_KEY = "miaw-studio-changelogs";
-		const CACHE_TIME = 3 * 60 * 1000;
+		const CACHE_TIME = 8 * 60 * 1000;
 
 		const loadChangelogs = async (): Promise<void> => {
 			try {
@@ -41,8 +43,13 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 						return;
 					}
 				}
-
-				const response = await fetch("https://api.github.com/repos/KuroReichi/miaw-studio/commits?per_page=20");
+				console.info(token);
+				const response = await fetch("https://api.github.com/repos/KuroReichi/miaw-studio/commits?per_page=20", {
+					headers: {
+						Authorization: token ? `Bearer ${token}` : "",
+						Accept: "application/vnd.github+json"
+					}
+				});
 
 				if (!response.ok) {
 					throw new Error("Failed to fetch commits");
@@ -87,7 +94,12 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 			<header className="commits-header">
 				<h3>Commit Changelogs</h3>
 
-				<button type="button" className="commits-close" onClick={handleClose} disabled={isClosing} aria-label="Close commits">
+				<button
+					type="button"
+					className="icon-button commits-close"
+					onClick={handleClose}
+					disabled={isClosing}
+					aria-label="Close commits">
 					<span className="icon">close</span>
 				</button>
 			</header>
@@ -123,7 +135,7 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 											<h2>{title}</h2>
 
 											<div className="changelog-meta">
-												{commit.author?.avatar_url && <img src={commit.author.avatar_url} alt="" />}
+												{commit.author?.avatar_url && <img loading="lazy" src={commit.author.avatar_url} alt="" />}
 												<span>{commit.author?.login ?? commit.commit.author.name}</span>
 												<span>•</span>
 												<code>{commit.sha.slice(0, 7)}</code>

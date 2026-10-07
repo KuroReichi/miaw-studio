@@ -30,6 +30,8 @@
 	flex-shrink: 0;
 	background: var(--surface);
 	border-bottom: 1px solid var(--surface-elevated);
+
+	box-shadow: 8px 8px 10px var(--backdrop);
 }
 
 .commits-header h3 {
@@ -51,7 +53,6 @@
 	outline: 0;
 	background: transparent;
 	color: var(--text);
-	cursor: pointer;
 }
 
 .commits-close:disabled {
@@ -172,7 +173,7 @@
 
 .changelog-item:hover {
 	transform: translateY(-1px);
-	border-color: var(--text-muted);
+	border-color: var(--border-hover);
 }
 
 .changelog-dot {
@@ -181,7 +182,7 @@
 
 .changelog-date {
 	margin-bottom: 9px;
-	color: var(--text-primaru);
+	color: var(--text-primary);
 	font-size: 11px;
 	font-weight: 500;
 }
@@ -204,7 +205,7 @@
 
 .changelog-main h2 {
 	margin: 0;
-	color: var(--text);
+	color: var(--text-primary);
 	font-size: 15px;
 	font-weight: 600;
 	line-height: 1.45;
@@ -241,10 +242,13 @@
 	font-size: 11px;
 	font-weight: 500;
 	text-decoration: none;
+	cursor: none;
+	transition: 0.5s ease transform;
 }
 
 .changelog-link:hover {
 	color: var(--primary-active);
+	transform: scale(1.1);
 }
 
 .changelog-loading {
