@@ -15,17 +15,31 @@
 	opacity: 0;
 	pointer-events: none;
 	transform: translateY(45px);
+	transition:
+		opacity 500ms ease,
+		transform 500ms ease,
+		visibility 0s linear 500ms;
 
 	&.commits-open {
 		visibility: visible;
+		opacity: 1;
 		pointer-events: auto;
-		animation: commits-enter 500ms ease forwards;
+		transform: translateY(0);
+		transition:
+			opacity 500ms ease,
+			transform 500ms ease,
+			visibility 0s linear;
 	}
 
 	&.commits-closing {
 		visibility: visible;
+		opacity: 0;
 		pointer-events: none;
-		animation: commits-exit 400ms ease forwards;
+		transform: translateY(55px);
+		transition:
+			opacity 400ms ease,
+			transform 400ms ease,
+			visibility 0s linear 400ms;
 	}
 
 	.commits-header {
@@ -262,30 +276,6 @@
 		.changelog-list {
 			padding-inline: 12px;
 		}
-	}
-}
-
-@keyframes commits-enter {
-	from {
-		opacity: 0;
-		transform: translateY(45px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes commits-exit {
-	from {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	to {
-		opacity: 0;
-		transform: translateY(55px);
 	}
 }
 
