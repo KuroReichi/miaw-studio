@@ -238,7 +238,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 				/>
 
 				<MUI.IconButton
-				className="commits-settings"
+					className="commits-settings"
 					onClick={openSettings}
 					aria-label="Commit display settings"
 					sx={{
@@ -301,7 +301,7 @@ export function Commits({ open, onClose }: CommitsProps): React.JSX.Element {
 				</div>
 			</main>
 
-			<footer className="footer">
+			<footer className="commits-footer">
 				<div>
 					© MIAW Studio 2026 - <a href="#">Apache-2.0</a>
 				</div>
