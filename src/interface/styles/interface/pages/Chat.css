@@ -112,12 +112,10 @@ section[datatype="chat"] {
 								flex-direction: row;
 								align-items: center;
 								gap: 10px;
-								height: 100%;
 								margin: 0.75px 0px;
 
 								> span.time {
 									margin-top: 1px;
-									height: 100%;
 									color: var(--text-muted);
 									font-size: calc(var(--font-size) - 3px);
 									align-content: center;
