@@ -1,6 +1,4 @@
 import App from "@legiun/App";
-import { initializeApp } from "firebase/app";
-import FirebaseConfig from "@legiun/firebase/configs.json";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
@@ -13,8 +11,6 @@ if (import.meta.env.DEV) {
 		eruda.init();
 	});
 }
-
-initializeApp(FirebaseConfig);
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>

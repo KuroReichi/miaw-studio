@@ -1,141 +1,84 @@
 import React from "react";
+import { onAuthStateChanged, type User } from "firebase/auth";
+import {
+	auth,
+	signInWithGoogleCredential,
+	signOutUser
+} from "@legiun/firebase/api/auth";
 
 export interface GoogleUser {
-	/** The issuer of the ID token. */
-	iss: string;
-	/** The client ID that authorized the ID token. */
-	azp: string;
-	/** The intended recipient of the ID token, typically the OAuth 2.0 client ID. */
-	aud: string;
-	/** The unique and stable identifier of the Google account. */
+	uid: string;
 	sub: string;
-	/** The email address associated with the Google account. */
 	email: string;
-	/** Whether Google has verified the user's email address. */
 	email_verified: boolean;
-	/** The nonce associated with the authentication request. */
-	nonce: string;
-	/** Unix timestamp indicating when the ID token becomes valid. */
-	nbf: number;
-	/** The user's full display name. */
 	name: string;
-	/** URL of the user's Google profile picture. */
 	picture: string;
-	/** The user's given name. */
-	given_name: string;
-	/** The user's family name. */
-	family_name: string;
-	/** Unix timestamp indicating when the ID token was issued. */
-	iat: number;
-	/** Unix timestamp indicating when the ID token expires. */
-	exp: number;
-	/** A unique identifier for the ID token. */
-	jti: string;
 }
 
 export interface GoogleAuthState {
 	authenticated: boolean;
-	credential: string | null;
+	loading: boolean;
 }
 
-const STORAGE_KEY = "google-auth";
-
+let currentUser: User | null = auth.currentUser;
 let authState: GoogleAuthState = {
-	authenticated: false,
-	credential: null
+	authenticated: currentUser !== null,
+	loading: true
 };
 
 const listeners = new Set<() => void>();
+let resolveAuthReady!: () => void;
 
-function notify() {
+const authReady = new Promise<void>((resolve) => {
+	resolveAuthReady = resolve;
+});
+
+function notify(): void {
 	listeners.forEach((listener) => listener());
 }
 
-function saveState(state: GoogleAuthState) {
-	authState = state;
+function setAuthState(user: User | null): void {
+	currentUser = user;
+	authState = {
+		authenticated: user !== null,
+		loading: false
+	};
 
-	if (state.credential) {
-		localStorage.setItem(
-			STORAGE_KEY,
-			JSON.stringify({
-				authenticated: true,
-				credential: state.credential
-			})
-		);
-	} else {
-		localStorage.removeItem(STORAGE_KEY);
-	}
-
+	resolveAuthReady();
 	notify();
 }
 
-function restoreState() {
-	try {
-		const stored = localStorage.getItem(STORAGE_KEY);
-		if (!stored) return;
-		const parsed = JSON.parse(stored) as GoogleAuthState;
-		if (parsed && parsed.authenticated === true && typeof parsed.credential === "string") {
-			authState = parsed;
-		}
-	} catch {
-		localStorage.removeItem(STORAGE_KEY);
-	}
+onAuthStateChanged(auth, setAuthState);
+
+function toGoogleUser(user: User): GoogleUser {
+	return {
+		uid: user.uid,
+		sub: user.uid,
+		email: user.email ?? "",
+		email_verified: user.emailVerified,
+		name: user.displayName ?? "Unknown",
+		picture: user.photoURL ?? ""
+	};
 }
 
-function decodeGoogleUser(credential: string): GoogleUser | null {
-	try {
-		const payload = credential.split(".")[1];
-
-		if (!payload) return null;
-
-		const decoded = JSON.parse(
-			decodeURIComponent(
-				atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
-					.split("")
-					.map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, "0")}`)
-					.join("")
-			)
-		) as GoogleUser;
-
-		if (typeof decoded.sub !== "string") {
-			return null;
-		}
-
-		return decoded;
-	} catch {
-		return null;
-	}
+export async function setGoogleAuth(credential: string): Promise<void> {
+	await signInWithGoogleCredential(credential);
 }
 
-restoreState();
-
-export function setGoogleAuth(credential: string) {
-	saveState({
-		authenticated: true,
-		credential
-	});
-}
-
-export function clearGoogleAuth() {
-	saveState({
-		authenticated: false,
-		credential: null
-	});
+export function clearGoogleAuth(): Promise<void> {
+	return signOutUser();
 }
 
 export function getGoogleUser(): GoogleUser | null {
-	if (!authState.credential) {
-		return null;
-	}
-
-	return decodeGoogleUser(authState.credential);
+	return currentUser ? toGoogleUser(currentUser) : null;
 }
 
-export function UserAuth(): Promise<boolean> {
-	return Promise.resolve(authState.authenticated);
+export async function UserAuth(): Promise<boolean> {
+	await authReady;
+	return currentUser !== null;
 }
 
-export function subscribeAuth(listener: () => void) {
+export function subscribeAuth(listener: () => void): () => void {
 	listeners.add(listener);
 
 	return () => {

@@ -4,17 +4,6 @@ import { setGoogleAuth } from "@legiun/auth/AuthCheck";
 
 import "@legiun/styles/interface/Authentication.css";
 
-export interface GoogleUser {
-	sub: string;
-	name?: string;
-	given_name?: string;
-	family_name?: string;
-	email?: string;
-	email_verified?: boolean;
-	picture?: string;
-	locale?: string;
-}
-
 function Authentication(): React.JSX.Element {
 	const speedLines = [
 		{ line: 1, className: "speed-line", style: { top: "15%", left: "-300px", width: "300px" } },
@@ -52,14 +41,17 @@ function Authentication(): React.JSX.Element {
 					<div className="login-action">
 						<div id="btn-login">
 							<GoogleLogin
-								onSuccess={(response) => {
+								onSuccess={async (response) => {
 									if (!response.credential) {
 										console.error("Google Auth: credential is missing.");
 										return;
 									}
 
-									setGoogleAuth(response.credential);
-									window.location.reload();
+									try {
+										await setGoogleAuth(response.credential);
+									} catch (error) {
+										console.error("Google Auth: Firebase sign-in failed.", error);
+									}
 								}}
 								onError={() => {
 									console.error("Google Login failed.");

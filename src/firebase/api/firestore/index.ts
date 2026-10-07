@@ -1,9 +1,6 @@
-import FirebaseConfig from "@legiun/firebase/configs.json";
-import { getApp, getApps, initializeApp } from "firebase/app";
+import { firebaseApp } from "@legiun/firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-const app = getApps().length > 0 ? getApp() : initializeApp(FirebaseConfig);
-
-export const firestore = getFirestore(app);
+export const firestore = getFirestore(firebaseApp, "miaw-db");
 
 export default firestore;

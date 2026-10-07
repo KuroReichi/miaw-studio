@@ -1,3 +1,5 @@
+import { auth } from "@legiun/firebase/api/auth";
+import { firestore } from "@legiun/firebase/api/firestore";
 import {
 	addDoc,
 	collection,
@@ -8,7 +10,6 @@ import {
 	serverTimestamp,
 	type Timestamp
 } from "firebase/firestore";
-import { firestore } from "./index";
 
 export interface ChatMessage {
 	uid: string;
@@ -19,11 +20,29 @@ export interface ChatMessage {
 	editedAt?: Timestamp | null;
 }
 
+export interface SendChatMessage {
+	content: string;
+}
+
 const messagesCollection = collection(firestore, "chats", "global", "messages");
 
-export async function sendMessage(message: Omit<ChatMessage, "createdAt" | "editedAt">): Promise<string> {
+export async function sendMessage(message: SendChatMessage): Promise<string> {
+	const user = auth.currentUser;
+	const content = message.content.trim();
+
+	if (!user) {
+		throw new Error("User is not authenticated.");
+	}
+
+	if (!content) {
+		throw new Error("Message cannot be empty.");
+	}
+
 	const reference = await addDoc(messagesCollection, {
-		...message,
+		uid: user.uid,
+		displayName: user.displayName ?? "Unknown",
+		photoURL: user.photoURL ?? "",
+		content,
 		createdAt: serverTimestamp()
 	});
 

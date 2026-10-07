@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+	match /databases/{database}/documents {
+		match /chats/global/messages/{messageId} {
+			allow read: if request.auth != null;
+
+			allow create: if request.auth != null
+				&& request.resource.data.keys().hasOnly([
+					"uid",
+					"displayName",
+					"photoURL",
+					"content",
+					"createdAt"
+				])
+				&& request.resource.data.uid == request.auth.uid
+				&& request.resource.data.displayName is string
+				&& request.resource.data.photoURL is string
+				&& request.resource.data.content is string
+				&& request.resource.data.content.size() > 0
+				&& request.resource.data.content.size() <= 2000
+				&& request.resource.data.createdAt == request.time;
+
+			allow update: if false;
+			allow delete: if request.auth != null
+				&& resource.data.uid == request.auth.uid;
+		}
+
+		match /{document=**} {
+			allow read, write: if false;
+		}
+	}
+}

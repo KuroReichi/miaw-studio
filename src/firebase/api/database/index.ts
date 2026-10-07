@@ -1,9 +1,16 @@
-import FirebaseConfig from "@legiun/firebase/configs.json";
-import { initializeApp } from "firebase/app";
-import { get, getDatabase, onValue, ref, remove, set, update, type DataSnapshot } from "firebase/database";
+import { firebaseApp } from "@legiun/firebase/app";
+import {
+	get,
+	getDatabase,
+	onValue,
+	ref,
+	remove,
+	set,
+	update,
+	type DataSnapshot
+} from "firebase/database";
 
-const app = initializeApp(FirebaseConfig);
-export const database = getDatabase(app);
+export const database = getDatabase(firebaseApp);
 
 const ROOT = "legiun";
 

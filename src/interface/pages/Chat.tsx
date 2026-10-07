@@ -51,7 +51,6 @@ function formatTime(timestamp: Timestamp) {
 
 export function Chat(): React.JSX.Element {
 	const googleUser = getGoogleUser();
-	const displayName = googleUser?.name ?? "Unknown";
 	const [messages, setMessages] = useState<Array<ChatMessage & { id: string }>>([]);
 	const [messageValue, setMessageValue] = useState("");
 
@@ -66,14 +65,12 @@ export function Chat(): React.JSX.Element {
 			return;
 		}
 
-		await sendMessage({
-			uid: googleUser.sub,
-			displayName: googleUser.name,
-			photoURL: googleUser.picture,
-			content
-		});
-
-		setMessageValue("");
+		try {
+			await sendMessage({ content });
+			setMessageValue("");
+		} catch (error) {
+			console.error("Failed to send message:", error);
+		}
 	};
 
 	return (
@@ -113,7 +110,9 @@ export function Chat(): React.JSX.Element {
 									data-name={message.uid}
 									className={`bubble ${isOwnMessage ? "bubble-right" : "bubble-left"}`}>
 									<div className="profile-picture">
-										{!isChain && <img loading="lazy" src={message.photoURL} width="100%" />}
+										{!isChain && message.photoURL && (
+											<img loading="lazy" src={message.photoURL} width="100%" referrerPolicy="no-referrer" />
+										)}
 									</div>
 
 									<div className={`bubble-chat${isChain ? " chain" : ""}`}>

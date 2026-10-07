@@ -14,24 +14,6 @@ import { Home } from "@legiun/pages/Home";
 import { Chat } from "@legiun/pages/Chat";
 import { Account } from "@legiun/pages/Account";
 
-interface GoogleUser {
-	iss: string;
-	azp: string;
-	aud: string;
-	sub: string;
-	email: string;
-	email_verified: boolean;
-	nonce: string;
-	nbf: number;
-	name: string;
-	picture: string;
-	given_name: string;
-	family_name: string;
-	iat: number;
-	exp: number;
-	jti: string;
-}
-
 const GOOGLE_CLIENT_ID = "608117489686-0chu2epsol2omo8hvst8sm3deblcthum.apps.googleusercontent.com";
 
 const pages = {
@@ -56,9 +38,13 @@ const pages = {
 } as const;
 type Page = keyof typeof pages;
 
-function AppContent(): React.JSX.Element {
+function AppContent(): React.JSX.Element | null {
 	const auth = useUserAuth();
 	const [currentPage, setCurrentPage] = React.useState<Page>("hall");
+
+	if (auth.loading) {
+		return null;
+	}
 
 	if (!auth.authenticated) {
 		return <Authentication />;
@@ -77,26 +63,6 @@ async function delay(time?: number) {
 	return new Promise((resolve) => setTimeout(() => resolve(true), time ?? Math.random() * 350));
 }
 
-async function imageToBase64(url: string): Promise<string> {
-	const response = await fetch(url);
-
-	console.log(response.url);
-	console.log(response.headers.get("content-type"));
-
-	const blob = await response.blob();
-
-	console.log(blob.type, blob.size);
-
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-
-		reader.onload = () => resolve(reader.result as string);
-		reader.onerror = reject;
-
-		reader.readAsDataURL(blob);
-	});
-}
-
 function App(): React.JSX.Element {
 	const [hidden, setHide] = React.useState(false);
 	const [body, setBody] = React.useState("Checking Authentication State...");
@@ -106,10 +72,11 @@ function App(): React.JSX.Element {
 			setBody("Checking Authentication State...");
 			await delay();
 			const authenticated = await UserAuth();
+
 			if (!authenticated) {
 				setBody("User haven't logged in");
 			} else {
-				const user = getGoogleUser() as GoogleUser;
+				const user = getGoogleUser();
 
 				if (user?.email_verified) {
 					setBody("Account Retrived");
@@ -119,6 +86,7 @@ function App(): React.JSX.Element {
 				setBody("Preparing Resources...");
 				await delay();
 			}
+
 			setTimeout(() => setHide(true), Math.random() * 100);
 		}
 
