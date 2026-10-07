@@ -4,6 +4,8 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
+		"docs": "typedoc",
+		"docs:watch": "typedoc --watch",
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "oxlint",
@@ -30,12 +32,13 @@
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^6.0.4",
 		"babel-plugin-react-compiler": "^1.0.0",
+		"jiti": "^2.7.0",
 		"oxlint": "^1.75.0",
-		"typescript": "~6.0.2",
+		"typescript": "^6.0.3",
 		"vite": "latest"
 	},
 	"allowScripts": {
-		"@firebase/util@1.15.2": true,
-		"protobufjs@7.6.5": true
+		"@firebase/util": true,
+		"protobufjs": true
 	}
 }
