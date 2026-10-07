@@ -41,16 +41,16 @@ section[datatype="account"] {
 				flex-direction: column;
 				gap: 5px;
 
-				margin-left: 27.5%;
-				margin-top: -47.5px;
+				margin-left: calc(117.5px + 3%);
+				margin-top: -37.5px;
 				.name {
 					color: var(--text-primary);
-					font-size: 26px;
+					font-size: 25px;
 				}
 
 				.username {
 					color: var(--text-disabled);
-					font-size: 14px;
+					font-size: 13px;
 				}
 			}
 		}
@@ -59,6 +59,7 @@ section[datatype="account"] {
 			padding: 16px;
 			display: flex;
 			flex: 1;
+
 			.card {
 				width: 100%;
 				height: fit-content;
@@ -70,13 +71,12 @@ section[datatype="account"] {
 				border: 1.5px solid var(--border-strong);
 				border-radius: 2.5px;
 
+				user-select: none;
+				-webkit-user-select: none;
+				-webkit-touch-callout: none;
+
 				.icon {
 					font-size: 24px;
-					transition: transform 0.5s ease;
-				}
-
-				.icon:active {
-					transform: scale(0.9);
 				}
 
 				[datatype="card-header"] {
@@ -104,8 +104,7 @@ section[datatype="account"] {
 					display: flex;
 					justify-content: space-between;
 					flex-direction: column;
-					gap: 2.5px;
-
+					gap: 5px;
 					padding: 16px;
 
 					button {
