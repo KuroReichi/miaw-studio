@@ -130,9 +130,9 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 										</div>
 
 										<div className="changelog-main">
-											<div className="changelog-type">{type}</div>
+											<div className="changelog-type">{type.charAt(0).toUpperCase() + type.slice(1)}</div>
 
-											<h2>{title}</h2>
+											<h2>{title.charAt(0).toUpperCase() + title.slice(1)}</h2>
 
 											<div className="changelog-meta">
 												{commit.author?.avatar_url && <img loading="lazy" src={commit.author.avatar_url} alt="" />}
@@ -141,7 +141,7 @@ export function Commits({ onClose }: CommitsProps): React.JSX.Element {
 												<code>{commit.sha.slice(0, 7)}</code>
 											</div>
 
-											<a className="changelog-link" href={commit.html_url} target="_blank" rel="noopener noreferrer">
+											<a className="changelog-link" href={commit.html_url} target="_blank">
 												View commit
 												<span>↗</span>
 											</a>

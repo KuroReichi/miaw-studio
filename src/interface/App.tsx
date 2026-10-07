@@ -115,9 +115,6 @@ function App(): React.JSX.Element {
 					setBody("Account Retrived");
 				}
 
-				const base64 = await imageToBase64(user.picture);
-				localStorage.setItem("profile_picture", base64);
-
 				await delay();
 				setBody("Preparing Resources...");
 				await delay();
