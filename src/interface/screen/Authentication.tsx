@@ -1,6 +1,5 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import { setGoogleAuth } from "@legiun/auth/AuthCheck";
 
 import "@legiun/styles/interface/Authentication.css";
@@ -59,15 +58,8 @@ function Authentication(): React.JSX.Element {
 										return;
 									}
 
-									const user = jwtDecode<GoogleUser>(response.credential);
-
-									console.log("Google user:", user);
-									console.log("ID:", user.sub);
-									console.log("Name:", user.name);
-									console.log("Email:", user.email);
-									console.log("Picture:", user.picture);
-
 									setGoogleAuth(response.credential);
+									window.location.reload();
 								}}
 								onError={() => {
 									console.error("Google Login failed.");
