@@ -72,17 +72,14 @@ export function Chat(): React.JSX.Element {
 				return;
 			}
 
-			const styles = getComputedStyle(message);
-			const fontSize = Number.parseFloat(styles.fontSize);
-			const lineHeight = Number.parseFloat(styles.lineHeight);
-			const resolvedLineHeight = Number.isFinite(lineHeight)
-				? lineHeight
-				: fontSize * 1.2;
-			const messageHeight = message.getBoundingClientRect().height;
-			const lineCount = Math.max(1, Math.round(messageHeight / resolvedLineHeight));
-			const offset = Math.max(0, 12.5 - (lineCount - 1) * 6.25);
+			const range = document.createRange();
+			range.selectNodeContents(message);
+			const lineCount = new Set(
+				Array.from(range.getClientRects()).map((rect) => Math.round(rect.top))
+			).size;
+			range.detach();
 
-			timestamp.style.height = "fit-content";
+			const offset = lineCount === 1 ? 12.5 : lineCount === 2 ? 6.25 : 0;
 			timestamp.style.marginTop = "-" + offset + "px";
 		};
 
@@ -99,7 +96,6 @@ export function Chat(): React.JSX.Element {
 			observers.forEach((observer) => observer.disconnect());
 		};
 	}, [messages]);
-
 	const handleSendMessage = async () => {
 		const content = messageValue.trim();
 
